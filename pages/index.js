@@ -84,8 +84,21 @@ function LandingPage() {
       <style jsx global>{`
         @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800;900&display=swap');
         * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Poppins', sans-serif; }
-        body { overflow-x: hidden; }
+        body { overflow-x: hidden; padding: 0; margin: 0; }
         html { scroll-behavior: smooth; }
+        
+        /* MOBILE RESPONSIVE */
+        @media (max-width: 768px) {
+          body { font-size: 14px; }
+          .wrapper { grid-template-columns: 1fr !important; gap: 10px !important; }
+          .sidebar { display: none !important; }
+          .container { height: auto !important; }
+          input, textarea, button { font-size: 16px; }
+        }
+        
+        @media (max-width: 480px) {
+          * { font-size: calc(var(--font-size, 1) * 0.9); }
+        }
       `}</style>
 
       {/* NAVBAR ULTRA-CLEAN */}
