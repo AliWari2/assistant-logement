@@ -265,12 +265,11 @@ function LandingPage({ onStart }) {
   );
 }
 
-// ===== TON APP PRINCIPALE (INTACTE) =====
+// ===== TON APP PRINCIPALE =====
 export default function Home() {
   const [user, setUser] = useState(null);
   const [loading, setLoading] = useState(true);
-  const [showAuth, setShowAuth] = useState(true);
-  const [showApp, setShowApp] = useState(false); // ✨ NOUVEAU: Landing page en premier
+  const [authPage, setAuthPage] = useState(false);
   const [isSignUp, setIsSignUp] = useState(false);
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
@@ -357,8 +356,7 @@ export default function Home() {
     const unsubscribe = onAuthStateChanged(auth, (currentUser) => {
       setUser(currentUser);
       if (currentUser) {
-        setShowApp(false); // ✨ Afficher landing page en premier
-        setShowAuth(false);
+        setAuthPage(false);
         loadConversations(currentUser.uid);
         loadHistoryFromConversations(currentUser.uid);
         setSessionTimeLeft(300);
@@ -369,7 +367,7 @@ export default function Home() {
   }, []);
 
   useEffect(() => {
-    if (showAuth) return;
+    if (!user) return;
     sessionTimer.current = setInterval(() => {
       setSessionTimeLeft(t => {
         if (t <= 1) { handleLogout(); return 300; }
@@ -377,7 +375,7 @@ export default function Home() {
       });
     }, 1000);
     return () => clearInterval(sessionTimer.current);
-  }, [showAuth]);
+  }, [user]);
 
   const scrollToBottom = () => messagesEndRef.current?.scrollIntoView({ behavior: 'smooth' });
   useEffect(() => { scrollToBottom(); }, [messages]);
@@ -454,7 +452,6 @@ export default function Home() {
     setAuthError('');
     try {
       await createUserWithEmailAndPassword(auth, email, password);
-      setShowAuth(false);
     } catch (error) {
       setAuthError(error.message);
     }
@@ -467,7 +464,6 @@ export default function Home() {
     setAuthError('');
     try {
       await signInWithEmailAndPassword(auth, email, password);
-      setShowAuth(false);
     } catch (error) {
       setAuthError(error.message);
     }
@@ -479,7 +475,6 @@ export default function Home() {
     setAuthError('');
     try {
       await signInAnonymously(auth);
-      setShowAuth(false);
     } catch (error) {
       setAuthError(error.message);
     }
@@ -488,8 +483,7 @@ export default function Home() {
 
   const handleLogout = async () => {
     await signOut(auth);
-    setShowApp(false); // ✨ Retour à la landing page
-    setShowAuth(true);
+    setAuthPage(false);
     setMessages([{ role: 'assistant', content: 'Bonjour 👋' }]);
     setConversations([]);
   };
@@ -1075,30 +1069,28 @@ export default function Home() {
 
   if (loading) return <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', height: '100vh', background: bgGradient }}><div style={{ color: 'white' }}>Chargement...</div></div>;
 
-  // SI PAS CONNECTÉ = LANDING PAGE
   if (!user) {
     return (
       <>
         <Head><title>Assistant Immobilier - Diagnostic IA</title></Head>
-        <LandingPage onStart={() => setShowAuth(true)} />
+        <LandingPage onStart={() => setAuthPage(true)} />
         
-        {/* AUTH MODAL */}
-        {showAuth && (
-          <div style={{ position: 'fixed', top: 0, left: 0, right: 0, bottom: 0, background: 'rgba(0,0,0,0.5)', display: 'flex', alignItems: 'center', justifyContent: 'center', zIndex: 1000 }}>
-            <div style={{ background: containerBg, borderRadius: '20px', padding: '40px', maxWidth: '400px', width: '100%', boxShadow: '0 25px 80px rgba(0,0,0,0.35)' }}>
-              <h1 style={{ fontSize: '28px', textAlign: 'center', color: textColor, marginBottom: '30px' }}>🏢 Se Connecter</h1>
+        {authPage && (
+          <div style={{ position: 'fixed', top: 0, left: 0, right: 0, bottom: 0, background: 'rgba(0,0,0,0.5)', display: 'flex', alignItems: 'center', justifyContent: 'center', zIndex: 1000, padding: '20px' }}>
+            <div style={{ background: containerBg, borderRadius: '20px', padding: 'clamp(24px, 5vw, 40px)', maxWidth: '400px', width: '100%', boxShadow: '0 25px 80px rgba(0,0,0,0.35)' }}>
+              <h1 style={{ fontSize: 'clamp(20px, 5vw, 28px)', textAlign: 'center', color: textColor, marginBottom: '24px' }}>🏢 Se Connecter</h1>
               <div style={{ display: 'flex', gap: '10px', marginBottom: '20px' }}>
-                <button onClick={() => setIsSignUp(false)} style={{ flex: 1, padding: '12px', background: !isSignUp ? bgGradient : secondaryBg, color: !isSignUp ? 'white' : textColor, border: 'none', borderRadius: '10px', fontWeight: '600', cursor: 'pointer' }}>Connexion</button>
-                <button onClick={() => setIsSignUp(true)} style={{ flex: 1, padding: '12px', background: isSignUp ? bgGradient : secondaryBg, color: isSignUp ? 'white' : textColor, border: 'none', borderRadius: '10px', fontWeight: '600', cursor: 'pointer' }}>Inscription</button>
+                <button onClick={() => setIsSignUp(false)} style={{ flex: 1, padding: '12px', background: !isSignUp ? bgGradient : secondaryBg, color: !isSignUp ? 'white' : textColor, border: 'none', borderRadius: '10px', fontWeight: '600', cursor: 'pointer', fontSize: 'clamp(12px, 2vw, 14px)' }}>Connexion</button>
+                <button onClick={() => setIsSignUp(true)} style={{ flex: 1, padding: '12px', background: isSignUp ? bgGradient : secondaryBg, color: isSignUp ? 'white' : textColor, border: 'none', borderRadius: '10px', fontWeight: '600', cursor: 'pointer', fontSize: 'clamp(12px, 2vw, 14px)' }}>Inscription</button>
               </div>
               {authError && <div style={{ background: '#fee', color: '#c00', padding: '12px', borderRadius: '8px', marginBottom: '20px', fontSize: '14px' }}>{authError}</div>}
               <div style={{ display: 'flex', flexDirection: 'column', gap: '12px', marginBottom: '20px' }}>
-                <input type="email" placeholder="Email" value={email} onChange={(e) => setEmail(e.target.value)} style={{ padding: '12px', border: `1.5px solid ${borderColor}`, borderRadius: '10px', background: containerBg, color: textColor }} />
-                <input type="password" placeholder="Mot de passe" value={password} onChange={(e) => setPassword(e.target.value)} style={{ padding: '12px', border: `1.5px solid ${borderColor}`, borderRadius: '10px', background: containerBg, color: textColor }} />
-                <button onClick={isSignUp ? handleSignUp : handleSignIn} disabled={authLoading} style={{ padding: '12px', background: bgGradient, color: 'white', border: 'none', borderRadius: '10px', fontWeight: '600', cursor: 'pointer', opacity: authLoading ? 0.6 : 1 }}>{authLoading ? '...' : (isSignUp ? 'S\'inscrire' : 'Se connecter')}</button>
+                <input type="email" placeholder="Email" value={email} onChange={(e) => setEmail(e.target.value)} style={{ padding: '12px', border: `1.5px solid ${borderColor}`, borderRadius: '10px', background: containerBg, color: textColor, fontSize: 'clamp(12px, 2vw, 14px)' }} />
+                <input type="password" placeholder="Mot de passe" value={password} onChange={(e) => setPassword(e.target.value)} style={{ padding: '12px', border: `1.5px solid ${borderColor}`, borderRadius: '10px', background: containerBg, color: textColor, fontSize: 'clamp(12px, 2vw, 14px)' }} />
+                <button onClick={isSignUp ? handleSignUp : handleSignIn} disabled={authLoading} style={{ padding: '12px', background: bgGradient, color: 'white', border: 'none', borderRadius: '10px', fontWeight: '600', cursor: 'pointer', opacity: authLoading ? 0.6 : 1, fontSize: 'clamp(12px, 2vw, 14px)' }}>{authLoading ? '...' : (isSignUp ? 'S\'inscrire' : 'Se connecter')}</button>
               </div>
-              <div style={{ textAlign: 'center', marginBottom: '20px', color: '#999' }}>ou</div>
-              <button onClick={handleGuestLogin} disabled={authLoading} style={{ width: '100%', padding: '12px', background: secondaryBg, color: '#2a5298', border: '2px solid #2a5298', borderRadius: '10px', fontWeight: '600', cursor: 'pointer' }}>👤 Continuer en tant qu'invité</button>
+              <div style={{ textAlign: 'center', marginBottom: '20px', color: '#999', fontSize: 'clamp(12px, 2vw, 14px)' }}>ou</div>
+              <button onClick={handleGuestLogin} disabled={authLoading} style={{ width: '100%', padding: '12px', background: secondaryBg, color: '#2a5298', border: '2px solid #2a5298', borderRadius: '10px', fontWeight: '600', cursor: 'pointer', fontSize: 'clamp(12px, 2vw, 14px)' }}>👤 Continuer en tant qu'invité</button>
             </div>
           </div>
         )}
@@ -1106,31 +1098,20 @@ export default function Home() {
     );
   }
 
-  // ✨ SI CONNECTÉ MAIS PAS COMMENCÉ = LANDING PAGE
-  if (user && !showApp) {
-    return (
-      <>
-        <Head><title>Assistant Immobilier</title><meta name="viewport" content="width=device-width, initial-scale=1" /></Head>
-        <LandingPage onStart={() => setShowApp(true)} />
-      </>
-    );
-  }
-
-  // SI CONNECTÉ ET COMMENCÉ = TON APP
   return (
     <>
       <Head><title>Assistant Immobilier</title><meta name="viewport" content="width=device-width, initial-scale=1" /></Head>
       <style jsx global>{`
         * { margin: 0; padding: 0; box-sizing: border-box; }
-        body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif; background: ${bgGradient}; min-height: 100vh; padding: 20px; }
-        .wrapper { max-width: 1200px; margin: 0 auto; display: grid; grid-template-columns: 280px 1fr; gap: 20px; height: 90vh; }
+        body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif; background: ${bgGradient}; min-height: 100vh; padding: clamp(12px, 3vw, 20px); }
+        .wrapper { max-width: 1200px; margin: 0 auto; display: grid; grid-template-columns: 280px 1fr; gap: clamp(12px, 3vw, 20px); height: 90vh; }
         .sidebar { background: ${containerBg}; border-radius: 20px; box-shadow: 0 25px 80px rgba(0,0,0,0.35); display: flex; flex-direction: column; overflow: hidden; }
-        .sidebar-header { background: ${bgGradient}; color: white; padding: 20px; text-align: center; }
-        .sidebar-header h2 { font-size: 16px; font-weight: 600; margin-bottom: 12px; }
+        .sidebar-header { background: ${bgGradient}; color: white; padding: clamp(16px, 3vw, 20px); text-align: center; }
+        .sidebar-header h2 { font-size: clamp(14px, 2.5vw, 16px); font-weight: 600; margin-bottom: 12px; }
         .stats-box { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; margin: 12px 0; }
         .stat-item { background: rgba(255,255,255,0.2); padding: 8px; border-radius: 6px; text-align: center; color: white; font-size: 12px; }
         .stat-number { font-weight: 700; font-size: 16px; }
-        .btn { width: 100%; padding: 10px; border: none; border-radius: 8px; cursor: pointer; font-weight: 600; font-size: 13px; margin-bottom: 8px; transition: all 0.2s; }
+        .btn { width: 100%; padding: 10px; border: none; border-radius: 8px; cursor: pointer; font-weight: 600; font-size: clamp(12px, 2vw, 13px); margin-bottom: 8px; transition: all 0.2s; }
         .btn-new { background: ${containerBg}; color: #2a5298; }
         .btn-new:hover { background: ${secondaryBg}; }
         .search-input { width: 100%; padding: 8px; border: 1px solid rgba(255,255,255,0.3); border-radius: 6px; background: rgba(255,255,255,0.2); color: white; margin-bottom: 12px; font-size: 12px; }
@@ -1147,27 +1128,28 @@ export default function Home() {
         .fav-btn { background: none; border: none; cursor: pointer; font-size: 16px; padding: 4px; transition: all 0.2s; }
         .fav-btn:hover { transform: scale(1.2); }
         .container { background: ${containerBg}; border-radius: 20px; box-shadow: 0 25px 80px rgba(0,0,0,0.35); display: flex; flex-direction: column; overflow: hidden; }
-        .header { background: ${bgGradient}; color: white; padding: 24px; display: flex; justify-content: space-between; align-items: center; }
+        .header { background: ${bgGradient}; color: white; padding: clamp(16px, 3vw, 24px); display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 12px; }
         .header-content { flex: 1; }
-        .header h1 { font-size: 26px; margin-bottom: 8px; font-weight: 600; }
-        .header p { font-size: 14px; opacity: 0.92; }
+        .header h1 { font-size: clamp(18px, 4vw, 26px); margin-bottom: 8px; font-weight: 600; }
+        .header p { font-size: clamp(12px, 2vw, 14px); opacity: 0.92; }
         .status-indicator { display: inline-block; width: 8px; height: 8px; background: #22c55e; border-radius: 50%; margin-right: 6px; animation: pulse 2s infinite; }
         @keyframes pulse { 0%, 100% { opacity: 1; } 50% { opacity: 0.5; } }
         .theme-toggle { background: rgba(255,255,255,0.2); border: none; color: white; padding: 8px 12px; border-radius: 6px; cursor: pointer; font-size: 16px; transition: all 0.2s; }
         .theme-toggle:hover { background: rgba(255,255,255,0.3); }
-        .toolbar { padding: 12px 24px; display: flex; gap: 10px; justify-content: flex-end; border-bottom: 1px solid ${borderColor}; background: ${containerBg}; flex-wrap: wrap; }
-        .toolbar-btn { padding: 8px 16px; background: ${secondaryBg}; color: #2a5298; border: 1px solid ${borderColor}; border-radius: 8px; cursor: pointer; font-size: 13px; font-weight: 600; transition: all 0.2s; }
+        .toolbar { padding: clamp(12px, 2vw, 12px) clamp(16px, 4vw, 24px); display: flex; gap: 10px; justify-content: flex-end; border-bottom: 1px solid ${borderColor}; background: ${containerBg}; flex-wrap: wrap; overflow-y: auto; }
+        .toolbar-btn { padding: 8px 12px; background: ${secondaryBg}; color: #2a5298; border: 1px solid ${borderColor}; border-radius: 8px; cursor: pointer; font-size: clamp(11px, 2vw, 13px); font-weight: 600; transition: all 0.2s; white-space: nowrap; }
         .toolbar-btn:hover { background: ${darkMode ? '#475569' : '#e8f0ff'}; }
-        .templates-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 8px; padding: 12px; }
-        .template-btn { padding: 12px 8px; background: ${secondaryBg}; color: #2a5298; border: 1px solid ${borderColor}; border-radius: 8px; cursor: pointer; font-size: 12px; transition: all 0.2s; }
+        .templates-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(100px, 1fr)); gap: 8px; padding: 12px; }
+        .template-btn { padding: 12px 8px; background: ${secondaryBg}; color: #2a5298; border: 1px solid ${borderColor}; border-radius: 8px; cursor: pointer; font-size: clamp(11px, 2vw, 12px); transition: all 0.2s; }
         .template-btn:hover { background: ${darkMode ? '#475569' : '#e8f0ff'}; }
-        .messages-container { flex: 1; overflow-y: auto; padding: 24px; display: flex; flex-direction: column; gap: 14px; background: ${darkMode ? '#0f172a' : 'linear-gradient(to bottom, #fafbfc 0%, #ffffff 100%)'}; }
+        .messages-container { flex: 1; overflow-y: auto; padding: clamp(12px, 2vw, 24px); display: flex; flex-direction: column; gap: 14px; background: ${darkMode ? '#0f172a' : 'linear-gradient(to bottom, #fafbfc 0%, #ffffff 100%)'}; }
         .message { display: flex; gap: 10px; animation: slideIn 0.3s ease-out; }
         @keyframes slideIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
         .message.user { justify-content: flex-end; }
         .msg-wrapper { display: flex; align-items: flex-start; gap: 8px; flex-direction: column; }
         .message.user .msg-wrapper { align-items: flex-end; }
-        .msg-content { max-width: 70%; padding: 14px 18px; border-radius: 14px; line-height: 1.65; font-size: 14px; word-break: break-word; box-shadow: 0 2px 8px rgba(0,0,0,0.08); }
+        .msg-content { max-width: 90%; padding: 14px 18px; border-radius: 14px; line-height: 1.65; font-size: clamp(12px, 2vw, 14px); word-break: break-word; box-shadow: 0 2px 8px rgba(0,0,0,0.08); }
+        @media (min-width: 768px) { .msg-content { max-width: 70%; } }
         .message.assistant .msg-content { background: ${secondaryBg}; color: ${textColor}; border-left: 3px solid #2a5298; white-space: pre-wrap; }
         .message.user .msg-content { background: linear-gradient(135deg, #1e3c72 0%, #2a5298 100%); color: white; white-space: pre-wrap; }
         .skeleton { background: linear-gradient(90deg, ${secondaryBg} 25%, ${darkMode ? '#475569' : '#f0f2f5'} 50%, ${secondaryBg} 75%); background-size: 200% 100%; animation: loading 1.5s infinite; }
@@ -1183,20 +1165,20 @@ export default function Home() {
         .reaction-emoji { cursor: pointer; padding: 4px; font-size: 18px; transition: all 0.2s; }
         .reaction-emoji:hover { transform: scale(1.2); }
         .suggestions { display: flex; gap: 8px; flex-wrap: wrap; margin-top: 8px; }
-        .suggestion-btn { padding: 6px 12px; background: ${secondaryBg}; color: #2a5298; border: 1px solid ${borderColor}; border-radius: 6px; cursor: pointer; font-size: 12px; transition: all 0.2s; }
+        .suggestion-btn { padding: 6px 12px; background: ${secondaryBg}; color: #2a5298; border: 1px solid ${borderColor}; border-radius: 6px; cursor: pointer; font-size: clamp(11px, 2vw, 12px); transition: all 0.2s; white-space: nowrap; }
         .suggestion-btn:hover { background: ${darkMode ? '#475569' : '#e8f0ff'}; }
-        .input-section { padding: 18px 24px; border-top: 1px solid ${borderColor}; background: ${containerBg}; display: flex; gap: 12px; flex-direction: column; }
-        .input-section input { flex: 1; padding: 12px 16px; border: 1.5px solid ${borderColor}; border-radius: 10px; background: ${containerBg}; color: ${textColor}; font-size: 14px; }
+        .input-section { padding: clamp(12px, 2vw, 18px) clamp(12px, 3vw, 24px); border-top: 1px solid ${borderColor}; background: ${containerBg}; display: flex; gap: 12px; flex-direction: column; }
+        .input-section input { flex: 1; padding: 12px 16px; border: 1.5px solid ${borderColor}; border-radius: 10px; background: ${containerBg}; color: ${textColor}; font-size: clamp(12px, 2vw, 14px); }
         .input-section input:focus { outline: none; border-color: #2a5298; box-shadow: 0 0 0 4px rgba(42,82,152,0.12); }
-        .send-btn { padding: 12px 28px; background: ${bgGradient}; color: white; border: none; border-radius: 10px; cursor: pointer; font-weight: 600; font-size: 14px; box-shadow: 0 4px 12px rgba(42,82,152,0.25); transition: all 0.3s; }
+        .send-btn { padding: 12px 28px; background: ${bgGradient}; color: white; border: none; border-radius: 10px; cursor: pointer; font-weight: 600; font-size: clamp(12px, 2vw, 14px); box-shadow: 0 4px 12px rgba(42,82,152,0.25); transition: all 0.3s; }
         .send-btn:hover:not(:disabled) { transform: translateY(-2px); box-shadow: 0 6px 16px rgba(42,82,152,0.35); }
         .send-btn:disabled { opacity: 0.65; }
         .voice-btn { padding: 12px 16px; background: ${isListening ? 'linear-gradient(135deg, #ef4444 0%, #dc2626 100%)' : bgGradient}; color: white; border: none; border-radius: 10px; cursor: pointer; font-weight: 600; font-size: 16px; box-shadow: 0 4px 12px rgba(42,82,152,0.25); transition: all 0.3s; animation: ${isListening ? 'voicePulse 1s infinite' : 'none'}; }
         @keyframes voicePulse { 0%, 100% { transform: scale(1); } 50% { transform: scale(1.05); } }
         .voice-btn:hover { transform: ${isListening ? 'scale(1.05)' : 'translateY(-2px)'}; }
         .voice-interim { font-size: 12px; color: #2a5298; font-style: italic; margin-top: 4px; min-height: 16px; }
-        .modal { position: fixed; top: 0; left: 0; right: 0; bottom: 0; background: rgba(0,0,0,0.7); display: flex; align-items: center; justify-content: center; z-index: 1000; }
-        .modal-content { background: ${containerBg}; border-radius: 16px; padding: 30px; max-width: 600px; width: 90%; max-height: 80vh; overflow-y: auto; color: ${textColor}; }
+        .modal { position: fixed; top: 0; left: 0; right: 0; bottom: 0; background: rgba(0,0,0,0.7); display: flex; align-items: center; justify-content: center; z-index: 1000; padding: 20px; }
+        .modal-content { background: ${containerBg}; border-radius: 16px; padding: clamp(24px, 5vw, 30px); max-width: 600px; width: 100%; max-height: 80vh; overflow-y: auto; color: ${textColor}; }
         .modal-close { float: right; background: none; border: none; font-size: 24px; cursor: pointer; color: ${textColor}; }
         .stat-box { margin: 16px 0; padding: 16px; background: ${secondaryBg}; border-radius: 8px; }
         .stat-label { font-weight: 600; color: #2a5298; font-size: 14px; }
@@ -1218,7 +1200,13 @@ export default function Home() {
         ::-webkit-scrollbar-track { background: ${darkMode ? '#1e293b' : '#f1f1f1'}; }
         ::-webkit-scrollbar-thumb { background: ${darkMode ? '#64748b' : '#888'}; border-radius: 3px; }
         ::-webkit-scrollbar-thumb:hover { background: ${darkMode ? '#94a3b8' : '#555'}; }
-        @media (max-width: 768px) { .wrapper { grid-template-columns: 1fr; height: auto; } .sidebar { display: none; } .msg-content { max-width: 85%; } }
+        @media (max-width: 768px) { 
+          .wrapper { grid-template-columns: 1fr; height: auto; } 
+          .sidebar { display: none; } 
+          .msg-content { max-width: 85% !important; }
+          .toolbar { overflow-x: auto; }
+          .toolbar-btn { font-size: clamp(10px, 1.5vw, 12px); padding: 6px 10px; }
+        }
       `}</style>
 
       <div className="wrapper" style={{ gridTemplateColumns: readingMode ? '1fr' : '280px 1fr' }}>
@@ -1287,7 +1275,7 @@ export default function Home() {
               <h1>🏢 Assistant Immobilier</h1>
               <p><span className="status-indicator"></span>Expertise en gestion locative, maintenance et résolution de problèmes</p>
             </div>
-            <button className="theme-toggle" onClick={() => setDarkMode(!darkMode)}>{darkMode ? '☀️' : '🌙'}</button>
+            <button className="theme-toggle" onClick={() => setDarkMode(!darkMode)} title="Activer le mode sombre">{darkMode ? '☀️' : '🌙'}</button>
           </div>
           <div className="toolbar">
             <button onClick={() => setReadingMode(!readingMode)} className="toolbar-btn" style={{ background: readingMode ? 'linear-gradient(135deg, #1e3c72 0%, #2a5298 100%)' : secondaryBg, color: readingMode ? 'white' : '#2a5298' }}>📖 Lecture</button>
@@ -1301,7 +1289,7 @@ export default function Home() {
           </div>
 
           {showTemplates && (
-            <div style={{ padding: '0 24px', borderBottom: `1px solid ${borderColor}`, background: secondaryBg }}>
+            <div style={{ padding: '0 clamp(16px, 3vw, 24px)', borderBottom: `1px solid ${borderColor}`, background: secondaryBg, overflow: 'x: auto' }}>
               <div className="templates-grid">
                 {TEMPLATES.map((t, i) => (
                   <button key={i} className="template-btn" onClick={() => { setInput(t.text); setShowTemplates(false); }}>{t.icon} {t.label}</button>
@@ -1386,10 +1374,10 @@ export default function Home() {
           </div>
 
           <div className="input-section">
-            <div style={{ display: 'flex', gap: '8px' }}>
+            <div style={{ display: 'flex', gap: '8px', flexWrap: 'wrap' }}>
               <button className="voice-btn" onClick={toggleVoiceRecognition} title={isListening ? 'Arrêter l\'écoute' : 'Parler'}>{isListening ? '🔴' : '🎤'}</button>
-              <div style={{ flex: 1 }}>
-                <div style={{ display: 'flex', gap: '8px', marginBottom: uploadPreview ? '8px' : '0' }}>
+              <div style={{ flex: 1, minWidth: '200px' }}>
+                <div style={{ display: 'flex', gap: '8px', marginBottom: uploadPreview ? '8px' : '0', flexWrap: 'wrap' }}>
                   <input 
                     type="text" 
                     placeholder={isListening ? "👂 Écoute en cours..." : uploadPreview ? "Décrivez votre fichier..." : "Posez votre question immobilière..."} 
@@ -1397,9 +1385,9 @@ export default function Home() {
                     onChange={(e) => setInput(e.target.value)} 
                     onKeyPress={(e) => { if (e.key === 'Enter' && !uploadPreview) handleSendMessage(e); }} 
                     disabled={chatLoading}
-                    style={{ flex: 1 }}
+                    style={{ flex: 1, minWidth: '150px' }}
                   />
-                  <label style={{ cursor: 'pointer', padding: '12px 16px', background: '#3b82f6', color: 'white', borderRadius: '10px', fontWeight: '600', display: 'flex', alignItems: 'center', gap: '4px' }}>
+                  <label style={{ cursor: 'pointer', padding: '12px 16px', background: '#3b82f6', color: 'white', borderRadius: '10px', fontWeight: '600', display: 'flex', alignItems: 'center', gap: '4px', fontSize: 'clamp(12px, 2vw, 14px)' }}>
                     📎
                     <input 
                       ref={fileInputRef}
@@ -1416,7 +1404,7 @@ export default function Home() {
                     <button onClick={() => { setUploadedFile(null); setUploadPreview(null); }} style={{ background: 'none', border: 'none', cursor: 'pointer', color: '#c00', fontSize: '16px' }}>✕</button>
                   </div>
                 )}
-                {uploadPreview && typeof uploadPreview !== 'string' && (
+                {uploadPreview && typeof uploadPreview === 'string' && (
                   <div style={{ marginBottom: '8px', borderRadius: '8px', overflow: 'hidden', maxHeight: '150px' }}>
                     <img src={uploadPreview} alt="preview" style={{ maxWidth: '100%', maxHeight: '150px', borderRadius: '8px' }} />
                   </div>
