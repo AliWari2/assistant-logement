@@ -527,6 +527,145 @@ function LandingPage({ onStart }) {
   );
 }
 
+// ===== EXPORT CHOOSER MODAL =====
+function ExportChooserModal({ shown, onDismiss, onChoose, darkMode }) {
+  if (!shown) return null;
+
+  const containerBg = darkMode ? '#111927' : 'white';
+  const textColor = darkMode ? '#e2e8f0' : '#1a1a1a';
+  const secondaryBg = darkMode ? '#1e293b' : '#f0f0f0';
+
+  return (
+    <div style={{
+      position: 'fixed', top: 0, left: 0, right: 0, bottom: 0,
+      background: 'rgba(0,0,0,0.7)', display: 'flex',
+      alignItems: 'center', justifyContent: 'center', zIndex: 1500,
+      padding: '20px',
+    }}>
+      <div style={{
+        background: containerBg, borderRadius: '20px',
+        padding: '40px 30px', maxWidth: '450px', width: '100%',
+        boxShadow: '0 25px 80px rgba(0,0,0,0.35)', color: textColor,
+      }}>
+        <h2 style={{ fontSize: '24px', fontWeight: '700', marginBottom: '12px', textAlign: 'center' }}>
+          📥 Exporter la Conversation
+        </h2>
+        <p style={{ fontSize: '14px', color: darkMode ? '#94a3b8' : '#666', marginBottom: '30px', textAlign: 'center' }}>
+          Choisissez le format d'export qui vous convient
+        </p>
+
+        <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '16px', marginBottom: '24px' }}>
+          <RippleButton
+            onClick={() => onChoose('pdf')}
+            style={{
+              padding: '24px',
+              background: 'linear-gradient(135deg, #ef4444 0%, #dc2626 100%)',
+              color: 'white',
+              border: 'none',
+              borderRadius: '12px',
+              cursor: 'pointer',
+              fontWeight: '700',
+              fontSize: '16px',
+              transition: 'all 0.3s',
+              position: 'relative',
+              overflow: 'hidden',
+              boxShadow: '0 10px 30px rgba(239, 68, 68, 0.3)',
+              display: 'flex',
+              flexDirection: 'column',
+              alignItems: 'center',
+              gap: '8px',
+            }}
+            onMouseOver={(e) => e.target.style.transform = 'translateY(-4px)'}
+            onMouseOut={(e) => e.target.style.transform = 'translateY(0)'}
+          >
+            <span style={{ fontSize: '32px' }}>📄</span>
+            <span>PDF</span>
+            <span style={{ fontSize: '11px', fontWeight: '500', opacity: 0.9 }}>Rapport professionnel</span>
+          </RippleButton>
+
+          <RippleButton
+            onClick={() => onChoose('txt')}
+            style={{
+              padding: '24px',
+              background: 'linear-gradient(135deg, #3b82f6 0%, #1e40af 100%)',
+              color: 'white',
+              border: 'none',
+              borderRadius: '12px',
+              cursor: 'pointer',
+              fontWeight: '700',
+              fontSize: '16px',
+              transition: 'all 0.3s',
+              position: 'relative',
+              overflow: 'hidden',
+              boxShadow: '0 10px 30px rgba(59, 130, 246, 0.3)',
+              display: 'flex',
+              flexDirection: 'column',
+              alignItems: 'center',
+              gap: '8px',
+            }}
+            onMouseOver={(e) => e.target.style.transform = 'translateY(-4px)'}
+            onMouseOut={(e) => e.target.style.transform = 'translateY(0)'}
+          >
+            <span style={{ fontSize: '32px' }}>📝</span>
+            <span>TXT</span>
+            <span style={{ fontSize: '11px', fontWeight: '500', opacity: 0.9 }}>Format texte simple</span>
+          </RippleButton>
+        </div>
+
+        <RippleButton
+          onClick={onDismiss}
+          style={{
+            width: '100%',
+            padding: '12px',
+            background: secondaryBg,
+            color: '#2a5298',
+            border: '1px solid rgba(0,0,0,0.1)',
+            borderRadius: '8px',
+            cursor: 'pointer',
+            fontWeight: '600',
+            fontSize: '14px',
+            position: 'relative',
+            overflow: 'hidden',
+          }}
+        >
+          Annuler
+        </RippleButton>
+      </div>
+    </div>
+  );
+}
+
+// ===== STATS CARD COMPONENT =====
+function StatsCard({ icon, label, value, color, darkMode }) {
+  const secondaryBg = darkMode ? '#334155' : '#f0f0f0';
+
+  return (
+    <div style={{
+      padding: '20px',
+      background: secondaryBg,
+      borderRadius: '14px',
+      border: `2px solid ${color}20`,
+      boxShadow: `0 4px 12px ${color}15`,
+      transition: 'all 0.3s',
+      cursor: 'default',
+    }}
+    onMouseOver={(e) => {
+      e.currentTarget.style.transform = 'translateY(-4px)';
+      e.currentTarget.style.boxShadow = `0 8px 20px ${color}25`;
+    }}
+    onMouseOut={(e) => {
+      e.currentTarget.style.transform = 'translateY(0)';
+      e.currentTarget.style.boxShadow = `0 4px 12px ${color}15`;
+    }}>
+      <div style={{ fontSize: '28px', marginBottom: '10px' }}>{icon}</div>
+      <div style={{ fontSize: '28px', fontWeight: '800', color, marginBottom: '8px' }}>{value}</div>
+      <div style={{ fontSize: '12px', fontWeight: '600', color: darkMode ? '#94a3b8' : '#666', letterSpacing: '0.5px' }}>
+        {label}
+      </div>
+    </div>
+  );
+}
+
 // ===== ONBOARDING TOOLTIP COMPONENT =====
 function OnboardingTooltip({ shown, onDismiss }) {
   if (!shown) return null;
@@ -777,6 +916,8 @@ export default function Home() {
   const [uploadedFile, setUploadedFile] = useState(null);
   const [uploadPreview, setUploadPreview] = useState(null);
   const [showOnboarding, setShowOnboarding] = useState(false);
+  const [showExportChooser, setShowExportChooser] = useState(false);
+  const [showStatsDashboard, setShowStatsDashboard] = useState(false);
 
   const messagesEndRef = useRef(null);
   const autoSaveTimer = useRef(null);
@@ -1127,33 +1268,131 @@ export default function Home() {
     setRatings({ ...ratings, [msgIdx]: rating });
   };
 
-  const exportConversationTXT = () => {
+  const exportConversation = (format) => {
+    setShowExportChooser(false);
+    
     if (!messages || messages.length === 0) return;
-    let content = `Assistant Immobilier - Conversation\nDate: ${new Date().toLocaleString('fr-FR')}\n\n${'='.repeat(50)}\n\n`;
-    messages.forEach((msg) => {
-      const role = msg.role === 'user' ? '👤 Vous' : '🤖 Assistant';
-      content += `${role}:\n${msg.content}\n\n${'-'.repeat(50)}\n\n`;
-    });
-    const element = document.createElement('a');
-    element.setAttribute('href', 'data:text/plain;charset=utf-8,' + encodeURIComponent(content));
-    element.setAttribute('download', `conversation_${new Date().getTime()}.txt`);
-    element.style.display = 'none';
-    document.body.appendChild(element);
-    element.click();
-    document.body.removeChild(element);
-    setToast('📄 Conversation exportée!');
-    setTimeout(() => setToast(null), 2000);
-  };
 
-  const exportConversationPDF = () => {
-    if (!messages || messages.length === 0) return;
-    const html = `<!DOCTYPE html><html><head><meta charset="UTF-8"><style>body{font-family:Arial,sans-serif;margin:20px;line-height:1.6}h1{color:#1e3c72;text-align:center;margin-bottom:10px}.date{text-align:center;color:#999;margin-bottom:30px;font-size:14px}.message{margin-bottom:20px;padding:15px;border-radius:8px}.user-msg{background:#e8f0ff;border-left:4px solid #1e3c72}.assistant-msg{background:#f5f5f5;border-left:4px solid #2a5298}.role{font-weight:bold;color:#1e3c72;margin-bottom:8px}.content{color:#333}hr{margin:30px 0;border:none;border-top:1px solid #ddd}</style></head><body><h1>🏢 Assistant Immobilier</h1><div class="date">${new Date().toLocaleString('fr-FR')}</div>${messages.map((msg)=>`<div class="message ${msg.role==='user'?'user-msg':'assistant-msg'}"><div class="role">${msg.role==='user'?'👤 Vous':'🤖 Assistant'}</div><div class="content">${msg.content.replace(/\n/g,'<br>')}</div></div>`).join('')}<hr><p style="text-align:center;color:#999;font-size:12px;">Généré par Assistant Immobilier</p></body></html>`;
-    const printWindow = window.open('', '', 'height=600,width=800');
-    printWindow.document.write(html);
-    printWindow.document.close();
-    setTimeout(() => { printWindow.print(); printWindow.close(); }, 250);
-    setToast('📄 Impression PDF en cours...');
-    setTimeout(() => setToast(null), 2000);
+    if (format === 'txt') {
+      let content = `Assistant Immobilier - Conversation\nDate: ${new Date().toLocaleString('fr-FR')}\n\n${'='.repeat(50)}\n\n`;
+      messages.forEach((msg) => {
+        const role = msg.role === 'user' ? '👤 Vous' : '🤖 Assistant';
+        content += `${role}:\n${msg.content}\n\n${'-'.repeat(50)}\n\n`;
+      });
+      const element = document.createElement('a');
+      element.setAttribute('href', 'data:text/plain;charset=utf-8,' + encodeURIComponent(content));
+      element.setAttribute('download', `conversation_${new Date().getTime()}.txt`);
+      element.style.display = 'none';
+      document.body.appendChild(element);
+      element.click();
+      document.body.removeChild(element);
+      setToast('📄 Conversation TXT exportée!');
+    } else if (format === 'pdf') {
+      const currentConv = conversations.find(c => c.id === currentConvId);
+      const html = `
+        <!DOCTYPE html>
+        <html>
+        <head>
+          <meta charset="UTF-8">
+          <style>
+            * { margin: 0; padding: 0; box-sizing: border-box; }
+            body { font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; background: #f5f5f5; }
+            .header { 
+              background: linear-gradient(135deg, #1e3c72 0%, #2a5298 100%);
+              color: white;
+              padding: 40px 30px;
+              text-align: center;
+              box-shadow: 0 4px 20px rgba(0,0,0,0.1);
+            }
+            .header h1 { font-size: 32px; margin-bottom: 10px; }
+            .header p { font-size: 14px; opacity: 0.9; }
+            .meta {
+              background: white;
+              padding: 20px 30px;
+              display: flex;
+              justify-content: space-between;
+              border-bottom: 2px solid #e5e7eb;
+              font-size: 13px;
+              color: #666;
+            }
+            .content {
+              background: white;
+              padding: 40px 30px;
+              max-width: 900px;
+              margin: 0 auto;
+            }
+            .message {
+              margin-bottom: 30px;
+              padding-bottom: 30px;
+              border-bottom: 1px solid #e5e7eb;
+            }
+            .message:last-child { border-bottom: none; }
+            .role {
+              font-weight: 700;
+              color: #1e3c72;
+              margin-bottom: 12px;
+              font-size: 14px;
+              text-transform: uppercase;
+              letter-spacing: 1px;
+            }
+            .message-text {
+              color: #333;
+              line-height: 1.8;
+              font-size: 13px;
+              white-space: pre-wrap;
+              word-wrap: break-word;
+            }
+            .footer {
+              background: #f5f5f5;
+              padding: 20px 30px;
+              text-align: center;
+              font-size: 11px;
+              color: #999;
+              border-top: 2px solid #e5e7eb;
+            }
+            @media print {
+              body { margin: 0; }
+              .header { page-break-after: avoid; }
+            }
+          </style>
+        </head>
+        <body>
+          <div class="header">
+            <h1>🏢 Assistant Immobilier</h1>
+            <p>Rapport de Diagnostic Immobilier</p>
+          </div>
+          
+          <div class="meta">
+            <span><strong>Titre:</strong> ${currentConv?.title || 'Sans titre'}</span>
+            <span><strong>Date:</strong> ${new Date().toLocaleString('fr-FR')}</span>
+            <span><strong>Messages:</strong> ${messages.length}</span>
+          </div>
+
+          <div class="content">
+            ${messages.map(msg => `
+              <div class="message">
+                <div class="role">${msg.role === 'user' ? '👤 UTILISATEUR' : '🤖 ASSISTANT'}</div>
+                <div class="message-text">${msg.content.replace(/</g, '&lt;').replace(/>/g, '&gt;')}</div>
+              </div>
+            `).join('')}
+          </div>
+
+          <div class="footer">
+            <p>Ce rapport a été généré automatiquement par Assistant Immobilier.</p>
+            <p>© 2025 - Tous droits réservés</p>
+          </div>
+        </body>
+        </html>
+      `;
+      
+      const printWindow = window.open('', '', 'height=600,width=800');
+      printWindow.document.write(html);
+      printWindow.document.close();
+      setTimeout(() => { printWindow.print(); printWindow.close(); }, 250);
+      setToast('📄 Impression PDF en cours...');
+    }
+    
+    setTimeout(() => setToast(null), 3000);
   };
 
   const generateSynthesis = async () => {
@@ -1540,11 +1779,14 @@ export default function Home() {
     timeSpent: getConvDuration(currentConvId)
   };
 
+  // ===== DARK MODE REFINED COLORS =====
   const bgGradient = darkMode ? 'linear-gradient(135deg, #0f172a 0%, #1a2847 100%)' : 'linear-gradient(135deg, #1e3c72 0%, #2a5298 100%)';
-  const containerBg = darkMode ? '#1e293b' : 'white';
+  const containerBg = darkMode ? '#111927' : 'white';
   const textColor = darkMode ? '#e2e8f0' : '#1a1a1a';
-  const borderColor = darkMode ? '#334155' : '#e5e7eb';
-  const secondaryBg = darkMode ? '#334155' : '#f0f0f0';
+  const borderColor = darkMode ? '#1e293b' : '#e5e7eb';
+  const secondaryBg = darkMode ? '#1e293b' : '#f0f0f0';
+  const hoverBg = darkMode ? '#334155' : '#e8f0ff';
+  const accentText = darkMode ? '#60a5fa' : '#2a5298';
 
   if (loading) return <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', height: '100vh', background: bgGradient }}><div style={{ color: 'white' }}>Chargement...</div></div>;
 
@@ -1699,6 +1941,7 @@ export default function Home() {
         .toast { position: fixed; bottom: 30px; right: 30px; background: #22c55e; color: white; padding: 12px 20px; border-radius: 8px; box-shadow: 0 4px 12px rgba(0,0,0,0.2); z-index: 2000; animation: slideInUp 0.3s ease-out; }
         @keyframes slideInUp { from { opacity: 0; transform: translateY(20px); } to { opacity: 1; transform: translateY(0); } }
         .session-badge { position: fixed; top: 20px; right: 20px; background: #fbbf24; color: #000; padding: 8px 12px; border-radius: 6px; font-size: 12px; font-weight: 600; z-index: 999; }
+        .stats-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(150px, 1fr)); gap: 16px; margin-bottom: 24px; }
         ::-webkit-scrollbar { width: 6px; }
         ::-webkit-scrollbar-track { background: ${darkMode ? '#1e293b' : '#f1f1f1'}; }
         ::-webkit-scrollbar-thumb { background: ${darkMode ? '#64748b' : '#888'}; border-radius: 3px; }
@@ -1713,6 +1956,7 @@ export default function Home() {
       `}</style>
 
       <OnboardingTooltip shown={showOnboarding} onDismiss={() => setShowOnboarding(false)} />
+      <ExportChooserModal shown={showExportChooser} onDismiss={() => setShowExportChooser(false)} onChoose={exportConversation} darkMode={darkMode} />
 
       <div className="wrapper" style={{ gridTemplateColumns: readingMode ? '1fr' : '280px 1fr' }}>
         {!readingMode && (
@@ -1838,10 +2082,9 @@ export default function Home() {
           </div>
           <div className="toolbar">
             <RippleButton onClick={() => setReadingMode(!readingMode)} className="toolbar-btn" style={{ background: readingMode ? 'linear-gradient(135deg, #1e3c72 0%, #2a5298 100%)' : secondaryBg, color: readingMode ? 'white' : '#2a5298' }}>📖 Lecture</RippleButton>
-            <RippleButton onClick={exportConversationTXT} className="toolbar-btn">📄 TXT</RippleButton>
-            <RippleButton onClick={exportConversationPDF} className="toolbar-btn">📑 PDF</RippleButton>
+            <RippleButton onClick={() => setShowExportChooser(true)} className="toolbar-btn">📥 Exporter</RippleButton>
             <RippleButton onClick={generateSynthesis} disabled={synthesisLoading} className="toolbar-btn">📋 Synthèse</RippleButton>
-            <RippleButton onClick={() => setShowAnalytics(true)} className="toolbar-btn">📊 Stats</RippleButton>
+            <RippleButton onClick={() => setShowStatsDashboard(true)} className="toolbar-btn">📊 Stats</RippleButton>
             <RippleButton onClick={() => setShowHistoryModal(true)} className="toolbar-btn">📜 Historique</RippleButton>
             <RippleButton onClick={generateShareLink} className="toolbar-btn">🔗 Partager</RippleButton>
             <RippleButton onClick={() => setShowTemplates(!showTemplates)} className="toolbar-btn">⚡ Templates</RippleButton>
@@ -1985,17 +2228,43 @@ export default function Home() {
         </div>
       </div>
 
-      {showAnalytics && (
-        <div className="modal" onClick={() => setShowAnalytics(false)}>
+      {showStatsDashboard && (
+        <div className="modal" onClick={() => setShowStatsDashboard(false)}>
           <div className="modal-content" onClick={(e) => e.stopPropagation()}>
-            <button className="modal-close" onClick={() => setShowAnalytics(false)}>✕</button>
-            <h2 style={{ marginBottom: '20px' }}>📊 Analytics</h2>
-            <div className="stat-box"><div className="stat-label">Total Conversations</div><div className="stat-value">{stats.totalConversations}</div></div>
-            <div className="stat-box"><div className="stat-label">Conversations Pinnées</div><div className="stat-value">{stats.pinned}</div></div>
-            <div className="stat-box"><div className="stat-label">Conversations Favoritées</div><div className="stat-value">{stats.favorites}</div></div>
-            <div className="stat-box"><div className="stat-label">Messages Actuels</div><div className="stat-value">{stats.totalMessages}</div></div>
-            <div className="stat-box"><div className="stat-label">Temps passé</div><div className="stat-value">{stats.timeSpent}</div></div>
-            <div className="stat-box"><div className="stat-label">Historique Recherche</div><div style={{ marginTop: '8px', fontSize: '13px' }}>{searchHistory.length === 0 ? 'Aucune recherche' : searchHistory.slice(-5).reverse().map((s, i) => <div key={i}>• {s.text}</div>)}</div></div>
+            <button className="modal-close" onClick={() => setShowStatsDashboard(false)}>✕</button>
+            <h2 style={{ marginBottom: '28px', fontSize: '28px', fontWeight: '800' }}>📊 Tableau de Bord</h2>
+            
+            <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(150px, 1fr))', gap: '16px', marginBottom: '24px' }}>
+              <StatsCard icon="💬" label="Conversations" value={stats.totalConversations} color="#3b82f6" darkMode={darkMode} />
+              <StatsCard icon="📝" label="Messages" value={stats.totalMessages} color="#10b981" darkMode={darkMode} />
+              <StatsCard icon="⭐" label="Favoris" value={stats.favorites} color="#fbbf24" darkMode={darkMode} />
+              <StatsCard icon="📌" label="Pinnées" value={stats.pinned} color="#ef4444" darkMode={darkMode} />
+            </div>
+
+            <div style={{ background: secondaryBg, padding: '24px', borderRadius: '14px', marginTop: '24px' }}>
+              <h3 style={{ fontSize: '16px', fontWeight: '700', marginBottom: '16px', color: darkMode ? '#60a5fa' : '#2a5298' }}>📈 Tendances par Catégorie</h3>
+              {getTrendData().length === 0 ? (
+                <div style={{ textAlign: 'center', color: darkMode ? '#94a3b8' : '#999' }}>Aucune donnée</div>
+              ) : (
+                <div style={{ display: 'flex', flexDirection: 'column', gap: '12px' }}>
+                  {getTrendData().map((trend, idx) => {
+                    const tag = TAGS.find(t => t.label === trend.tag);
+                    const percentage = Math.round((trend.count / Math.max(...getTrendData().map(t => t.count))) * 100);
+                    return (
+                      <div key={idx}>
+                        <div style={{ display: 'flex', justifyContent: 'space-between', marginBottom: '6px' }}>
+                          <span style={{ fontWeight: '600' }}>{tag?.icon} {trend.tag}</span>
+                          <span style={{ color: darkMode ? '#60a5fa' : '#2a5298', fontWeight: '700' }}>{trend.count}</span>
+                        </div>
+                        <div style={{ background: darkMode ? '#0f172a' : '#f0f0f0', height: '8px', borderRadius: '4px', overflow: 'hidden' }}>
+                          <div style={{ background: tag?.color, height: '100%', width: `${percentage}%`, borderRadius: '4px', transition: 'width 0.3s' }}></div>
+                        </div>
+                      </div>
+                    );
+                  })}
+                </div>
+              )}
+            </div>
           </div>
         </div>
       )}
