@@ -32,7 +32,7 @@ const detectTag = (text) => {
   return 'Généraliste';
 };
 
-// ===== LANDING PAGE PREMIUM MOBILE RESPONSIVE =====
+// ===== LANDING PAGE MOBILE-FIRST RESPONSIVE =====
 function LandingPage({ onStart }) {
   const [hoveredCard, setHoveredCard] = useState(null);
   const [scrollY, setScrollY] = useState(0);
@@ -43,7 +43,6 @@ function LandingPage({ onStart }) {
   const [diagCount, setDiagCount] = useState(0);
   const [satisfactionCount, setSatisfactionCount] = useState(0);
 
-  // COUNT-UP ANIMATION
   const countUp = (target, setFunc, duration = 1800) => {
     let current = 0;
     const step = target / (duration / 30);
@@ -62,14 +61,12 @@ function LandingPage({ onStart }) {
     const handleScroll = () => setScrollY(window.scrollY);
     window.addEventListener('scroll', handleScroll);
     
-    // Animations hero stats
     setTimeout(() => {
       countUp(10, setStat1, 1500);
       countUp(28, setStat2, 1500);
       countUp(100, setStat3, 1500);
     }, 400);
     
-    // Animations trust section (plus tard)
     setTimeout(() => {
       countUp(500, setUsersCount, 2000);
       countUp(10000, setDiagCount, 2000);
@@ -88,32 +85,110 @@ function LandingPage({ onStart }) {
         html { scroll-behavior: smooth; }
       `}</style>
 
-      {/* NAVBAR ULTRA-CLEAN */}
-      <nav style={{ position: 'sticky', top: 0, zIndex: 100, background: 'rgba(255,255,255,0.98)', backdropFilter: 'blur(20px)', borderBottom: '1px solid rgba(30,60,114,0.08)', padding: '24px 50px', display: 'flex', justifyContent: 'center', alignItems: 'center', boxShadow: scrollY > 10 ? '0 2px 20px rgba(0,0,0,0.05)' : 'none', transition: 'all 0.3s' }}>
-        <div style={{ fontSize: '22px', fontWeight: '900', background: 'linear-gradient(135deg, #1e3c72 0%, #2a5298 100%)', backgroundClip: 'text', WebkitBackgroundClip: 'text', color: 'transparent', letterSpacing: '-0.5px' }}>
+      {/* NAVBAR RESPONSIVE */}
+      <nav style={{ 
+        position: 'sticky', 
+        top: 0, 
+        zIndex: 100, 
+        background: 'rgba(255,255,255,0.98)', 
+        backdropFilter: 'blur(20px)', 
+        borderBottom: '1px solid rgba(30,60,114,0.08)', 
+        padding: 'clamp(16px, 4vw, 24px)', 
+        display: 'flex', 
+        justifyContent: 'center', 
+        alignItems: 'center', 
+        boxShadow: scrollY > 10 ? '0 2px 20px rgba(0,0,0,0.05)' : 'none', 
+        transition: 'all 0.3s' 
+      }}>
+        <div style={{ 
+          fontSize: 'clamp(16px, 4vw, 22px)', 
+          fontWeight: '900', 
+          background: 'linear-gradient(135deg, #1e3c72 0%, #2a5298 100%)', 
+          backgroundClip: 'text', 
+          WebkitBackgroundClip: 'text', 
+          color: 'transparent', 
+          letterSpacing: '-0.5px',
+          textAlign: 'center'
+        }}>
           🏢 Assistant Immobilier
         </div>
       </nav>
 
-      {/* HERO SECTION ÉPOUSTOUFLANTE */}
-      <section style={{ padding: '160px 50px 140px', textAlign: 'center', background: 'linear-gradient(180deg, #ffffff 0%, #f5f8ff 50%, #f0f5ff 100%)', position: 'relative', overflow: 'hidden' }}>
+      {/* HERO SECTION RESPONSIVE */}
+      <section style={{ 
+        padding: 'clamp(60px, 15vw, 160px) clamp(20px, 5vw, 50px) clamp(60px, 15vw, 140px)', 
+        textAlign: 'center', 
+        background: 'linear-gradient(180deg, #ffffff 0%, #f5f8ff 50%, #f0f5ff 100%)', 
+        position: 'relative', 
+        overflow: 'hidden' 
+      }}>
         {/* BACKGROUND ELEMENTS */}
-        <div style={{ position: 'absolute', top: '-10%', right: '-5%', width: '500px', height: '500px', background: 'radial-gradient(circle, rgba(30,60,114,0.08) 0%, transparent 70%)', borderRadius: '50%', filter: 'blur(60px)' }}></div>
-        <div style={{ position: 'absolute', bottom: '-15%', left: '-8%', width: '600px', height: '600px', background: 'radial-gradient(circle, rgba(42,82,152,0.07) 0%, transparent 70%)', borderRadius: '50%', filter: 'blur(60px)' }}></div>
+        <div style={{ 
+          position: 'absolute', 
+          top: '-10%', 
+          right: '-5%', 
+          width: 'clamp(300px, 50vw, 500px)', 
+          height: 'clamp(300px, 50vw, 500px)', 
+          background: 'radial-gradient(circle, rgba(30,60,114,0.08) 0%, transparent 70%)', 
+          borderRadius: '50%', 
+          filter: 'blur(60px)' 
+        }}></div>
+        <div style={{ 
+          position: 'absolute', 
+          bottom: '-15%', 
+          left: '-8%', 
+          width: 'clamp(400px, 60vw, 600px)', 
+          height: 'clamp(400px, 60vw, 600px)', 
+          background: 'radial-gradient(circle, rgba(42,82,152,0.07) 0%, transparent 70%)', 
+          borderRadius: '50%', 
+          filter: 'blur(60px)' 
+        }}></div>
         
         <div style={{ maxWidth: '1000px', margin: '0 auto', position: 'relative', zIndex: 2 }}>
           {/* BADGE */}
-          <div style={{ fontSize: '13px', fontWeight: '700', color: '#2a5298', marginBottom: '30px', letterSpacing: '2px', textTransform: 'uppercase', display: 'inline-block', padding: '10px 20px', background: 'rgba(42,82,152,0.08)', borderRadius: '50px', backdropFilter: 'blur(10px)' }}>
+          <div style={{ 
+            fontSize: 'clamp(11px, 2vw, 13px)', 
+            fontWeight: '700', 
+            color: '#2a5298', 
+            marginBottom: 'clamp(20px, 5vw, 30px)', 
+            letterSpacing: '2px', 
+            textTransform: 'uppercase', 
+            display: 'inline-block', 
+            padding: 'clamp(8px, 2vw, 10px) clamp(16px, 3vw, 20px)', 
+            background: 'rgba(42,82,152,0.08)', 
+            borderRadius: '50px', 
+            backdropFilter: 'blur(10px)' 
+          }}>
             ✨ Solution IA pour l'Immobilier
           </div>
           
           {/* MAIN HEADLINE */}
-          <h1 style={{ fontSize: '84px', fontWeight: '900', lineHeight: '1.05', marginBottom: '32px', color: '#0f172a', letterSpacing: '-1px' }}>
-            Votre Expert<br />en <span style={{ background: 'linear-gradient(135deg, #1e3c72 0%, #2a5298 100%)', backgroundClip: 'text', WebkitBackgroundClip: 'text', color: 'transparent' }}>10 Secondes</span>
+          <h1 style={{ 
+            fontSize: 'clamp(28px, 8vw, 84px)', 
+            fontWeight: '900', 
+            lineHeight: '1.05', 
+            marginBottom: 'clamp(20px, 5vw, 32px)', 
+            color: '#0f172a', 
+            letterSpacing: '-1px' 
+          }}>
+            Votre Expert<br />en <span style={{ 
+              background: 'linear-gradient(135deg, #1e3c72 0%, #2a5298 100%)', 
+              backgroundClip: 'text', 
+              WebkitBackgroundClip: 'text', 
+              color: 'transparent' 
+            }}>10 Secondes</span>
           </h1>
           
           {/* SUBHEADLINE */}
-          <p style={{ fontSize: '20px', color: '#4a5568', marginBottom: '50px', lineHeight: '1.8', maxWidth: '750px', margin: '0 auto 50px', fontWeight: '500' }}>
+          <p style={{ 
+            fontSize: 'clamp(14px, 3vw, 20px)', 
+            color: '#4a5568', 
+            marginBottom: 'clamp(30px, 8vw, 50px)', 
+            lineHeight: '1.8', 
+            maxWidth: '750px', 
+            margin: '0 auto clamp(30px, 8vw, 50px)', 
+            fontWeight: '500' 
+          }}>
             Diagnostic immobilier instantané avec Claude. Analysez les photos, identifiez les problèmes et recevez des solutions en temps réel.
           </p>
 
@@ -131,46 +206,110 @@ function LandingPage({ onStart }) {
             boxShadow: '0 10px 40px rgba(30,60,114,0.3)', 
             transition: 'all 0.3s'
           }} 
-          onMouseOver={(e) => { e.target.style.transform = 'scale(1.05)'; }} 
-          onMouseOut={(e) => { e.target.style.transform = 'scale(1)'; }}>
+          onMouseOver={(e) => { if (typeof window !== 'undefined' && window.innerWidth > 768) e.target.style.transform = 'scale(1.05)'; }} 
+          onMouseOut={(e) => { if (typeof window !== 'undefined' && window.innerWidth > 768) e.target.style.transform = 'scale(1)'; }}
+          onTouchStart={(e) => { e.target.style.transform = 'scale(0.98)'; }}
+          onTouchEnd={(e) => { e.target.style.transform = 'scale(1)'; }}>
             🚀 Commencer le Diagnostic
           </button>
 
           {/* STATS SECTION */}
-          <div style={{ display: 'grid', gridTemplateColumns: 'repeat(3, 1fr)', gap: '40px', marginTop: '80px', maxWidth: '850px', margin: '80px auto 0' }}>
-            <div style={{ padding: '30px', borderRadius: '16px', background: 'rgba(255,255,255,0.6)', backdropFilter: 'blur(10px)', border: '1px solid rgba(30,60,114,0.1)' }}>
-              <div style={{ fontSize: '52px', fontWeight: '900', background: 'linear-gradient(135deg, #1e3c72 0%, #2a5298 100%)', backgroundClip: 'text', WebkitBackgroundClip: 'text', color: 'transparent', marginBottom: '12px' }}>
-                {stat1}<span style={{ fontSize: '20px', marginLeft: '4px' }}>sec</span>
+          <div style={{ 
+            display: 'grid', 
+            gridTemplateColumns: 'repeat(auto-fit, minmax(clamp(100px, 25vw, 200px), 1fr))', 
+            gap: 'clamp(20px, 5vw, 40px)', 
+            marginTop: 'clamp(40px, 10vw, 80px)', 
+            maxWidth: '850px', 
+            margin: 'clamp(40px, 10vw, 80px) auto 0' 
+          }}>
+            <div style={{ 
+              padding: 'clamp(20px, 4vw, 30px)', 
+              borderRadius: '16px', 
+              background: 'rgba(255,255,255,0.6)', 
+              backdropFilter: 'blur(10px)', 
+              border: '1px solid rgba(30,60,114,0.1)' 
+            }}>
+              <div style={{ 
+                fontSize: 'clamp(32px, 8vw, 52px)', 
+                fontWeight: '900', 
+                background: 'linear-gradient(135deg, #1e3c72 0%, #2a5298 100%)', 
+                backgroundClip: 'text', 
+                WebkitBackgroundClip: 'text', 
+                color: 'transparent', 
+                marginBottom: '12px' 
+              }}>
+                {stat1}<span style={{ fontSize: 'clamp(14px, 3vw, 20px)', marginLeft: '4px' }}>sec</span>
               </div>
-              <div style={{ fontSize: '14px', color: '#666', fontWeight: '600', letterSpacing: '0.5px' }}>DIAGNOSTIC</div>
+              <div style={{ fontSize: 'clamp(12px, 2.5vw, 14px)', color: '#666', fontWeight: '600', letterSpacing: '0.5px' }}>DIAGNOSTIC</div>
             </div>
-            <div style={{ padding: '30px', borderRadius: '16px', background: 'rgba(255,255,255,0.6)', backdropFilter: 'blur(10px)', border: '1px solid rgba(30,60,114,0.1)' }}>
-              <div style={{ fontSize: '52px', fontWeight: '900', background: 'linear-gradient(135deg, #1e3c72 0%, #2a5298 100%)', backgroundClip: 'text', WebkitBackgroundClip: 'text', color: 'transparent', marginBottom: '12px' }}>
+            <div style={{ 
+              padding: 'clamp(20px, 4vw, 30px)', 
+              borderRadius: '16px', 
+              background: 'rgba(255,255,255,0.6)', 
+              backdropFilter: 'blur(10px)', 
+              border: '1px solid rgba(30,60,114,0.1)' 
+            }}>
+              <div style={{ 
+                fontSize: 'clamp(32px, 8vw, 52px)', 
+                fontWeight: '900', 
+                background: 'linear-gradient(135deg, #1e3c72 0%, #2a5298 100%)', 
+                backgroundClip: 'text', 
+                WebkitBackgroundClip: 'text', 
+                color: 'transparent', 
+                marginBottom: '12px' 
+              }}>
                 {stat2}+
               </div>
-              <div style={{ fontSize: '14px', color: '#666', fontWeight: '600', letterSpacing: '0.5px' }}>FONCTIONNALITÉS</div>
+              <div style={{ fontSize: 'clamp(12px, 2.5vw, 14px)', color: '#666', fontWeight: '600', letterSpacing: '0.5px' }}>FONCTIONNALITÉS</div>
             </div>
-            <div style={{ padding: '30px', borderRadius: '16px', background: 'rgba(255,255,255,0.6)', backdropFilter: 'blur(10px)', border: '1px solid rgba(30,60,114,0.1)' }}>
-              <div style={{ fontSize: '52px', fontWeight: '900', background: 'linear-gradient(135deg, #1e3c72 0%, #2a5298 100%)', backgroundClip: 'text', WebkitBackgroundClip: 'text', color: 'transparent', marginBottom: '12px' }}>
+            <div style={{ 
+              padding: 'clamp(20px, 4vw, 30px)', 
+              borderRadius: '16px', 
+              background: 'rgba(255,255,255,0.6)', 
+              backdropFilter: 'blur(10px)', 
+              border: '1px solid rgba(30,60,114,0.1)' 
+            }}>
+              <div style={{ 
+                fontSize: 'clamp(32px, 8vw, 52px)', 
+                fontWeight: '900', 
+                background: 'linear-gradient(135deg, #1e3c72 0%, #2a5298 100%)', 
+                backgroundClip: 'text', 
+                WebkitBackgroundClip: 'text', 
+                color: 'transparent', 
+                marginBottom: '12px' 
+              }}>
                 {stat3}%
               </div>
-              <div style={{ fontSize: '14px', color: '#666', fontWeight: '600', letterSpacing: '0.5px' }}>GRATUIT</div>
+              <div style={{ fontSize: 'clamp(12px, 2.5vw, 14px)', color: '#666', fontWeight: '600', letterSpacing: '0.5px' }}>GRATUIT</div>
             </div>
           </div>
         </div>
       </section>
 
-      {/* FEATURES SECTION */}
-      <section style={{ padding: '120px 50px', background: 'white' }}>
+      {/* FEATURES SECTION RESPONSIVE */}
+      <section style={{ padding: 'clamp(60px, 15vw, 120px) clamp(20px, 5vw, 50px)', background: 'white' }}>
         <div style={{ maxWidth: '1200px', margin: '0 auto' }}>
-          <div style={{ textAlign: 'center', marginBottom: '80px' }}>
-            <h2 style={{ fontSize: '60px', fontWeight: '900', color: '#0f172a', marginBottom: '24px', letterSpacing: '-0.5px' }}>Pourquoi ça marche</h2>
-            <p style={{ fontSize: '18px', color: '#666', maxWidth: '650px', margin: '0 auto', fontWeight: '500', lineHeight: '1.7' }}>
+          <div style={{ textAlign: 'center', marginBottom: 'clamp(40px, 10vw, 80px)' }}>
+            <h2 style={{ 
+              fontSize: 'clamp(24px, 6vw, 60px)', 
+              fontWeight: '900', 
+              color: '#0f172a', 
+              marginBottom: 'clamp(16px, 4vw, 24px)', 
+              letterSpacing: '-0.5px' 
+            }}>Pourquoi ça marche</h2>
+            <p style={{ 
+              fontSize: 'clamp(14px, 3vw, 18px)', 
+              color: '#666', 
+              maxWidth: '650px', 
+              margin: '0 auto', 
+              fontWeight: '500', 
+              lineHeight: '1.7' 
+            }}>
               Une solution complète pensée pour les propriétaires, syndics et gestionnaires immobiliers. Technologie Claude IA + interface intuitive.
             </p>
           </div>
 
-          <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(340px, 1fr))', gap: '32px' }}>
+          <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(clamp(280px, 45vw, 340px), 1fr))', gap: 'clamp(20px, 4vw, 32px)' }}>
             {[
               { icon: '🎯', title: 'Diagnostic Précis', desc: 'IA Claude analyse images et contexte avec 99% de précision' },
               { icon: '⚡', title: 'Instantané', desc: 'Résultats en moins de 10 secondes, sans file d\'attente' },
@@ -179,24 +318,55 @@ function LandingPage({ onStart }) {
               { icon: '📊', title: 'Historique Complet', desc: 'Conservez tous vos diagnostics et suivez l\'historique' },
               { icon: '🔒', title: 'Données Sécurisées', desc: 'Vos données protégées avec chiffrement de niveau entreprise' }
             ].map((feat, i) => (
-              <div key={i} onMouseEnter={() => setHoveredCard(i)} onMouseLeave={() => setHoveredCard(null)} style={{ padding: '44px', background: hoveredCard === i ? 'linear-gradient(135deg, #f0f5ff 0%, #f8faff 100%)' : '#f9fafb', border: hoveredCard === i ? '2px solid #2a5298' : '2px solid #f0f0f0', borderRadius: '18px', cursor: 'pointer', transition: 'all 0.4s cubic-bezier(0.2, 0, 0, 1)', transform: hoveredCard === i ? 'translateY(-12px)' : 'translateY(0)', boxShadow: hoveredCard === i ? '0 25px 50px rgba(30,60,114,0.15)' : '0 5px 15px rgba(0,0,0,0.03)' }}>
-                <div style={{ fontSize: '48px', marginBottom: '20px' }}>{feat.icon}</div>
-                <h3 style={{ fontSize: '22px', fontWeight: '800', color: '#0f172a', marginBottom: '14px', letterSpacing: '-0.3px' }}>{feat.title}</h3>
-                <p style={{ fontSize: '15px', color: '#666', lineHeight: '1.7', fontWeight: '500' }}>{feat.desc}</p>
+              <div key={i} onMouseEnter={() => setHoveredCard(i)} onMouseLeave={() => setHoveredCard(null)} style={{ 
+                padding: 'clamp(24px, 5vw, 44px)', 
+                background: hoveredCard === i ? 'linear-gradient(135deg, #f0f5ff 0%, #f8faff 100%)' : '#f9fafb', 
+                border: hoveredCard === i ? '2px solid #2a5298' : '2px solid #f0f0f0', 
+                borderRadius: '18px', 
+                cursor: 'pointer', 
+                transition: 'all 0.4s cubic-bezier(0.2, 0, 0, 1)', 
+                transform: hoveredCard === i ? 'translateY(-12px)' : 'translateY(0)', 
+                boxShadow: hoveredCard === i ? '0 25px 50px rgba(30,60,114,0.15)' : '0 5px 15px rgba(0,0,0,0.03)' 
+              }}>
+                <div style={{ fontSize: 'clamp(32px, 8vw, 48px)', marginBottom: '20px' }}>{feat.icon}</div>
+                <h3 style={{ 
+                  fontSize: 'clamp(16px, 4vw, 22px)', 
+                  fontWeight: '800', 
+                  color: '#0f172a', 
+                  marginBottom: '14px', 
+                  letterSpacing: '-0.3px' 
+                }}>{feat.title}</h3>
+                <p style={{ 
+                  fontSize: 'clamp(13px, 3vw, 15px)', 
+                  color: '#666', 
+                  lineHeight: '1.7', 
+                  fontWeight: '500' 
+                }}>{feat.desc}</p>
               </div>
             ))}
           </div>
         </div>
       </section>
 
-      {/* HOW IT WORKS */}
-      <section style={{ padding: '120px 50px', background: 'linear-gradient(180deg, #f5f8ff 0%, #f0f5ff 100%)' }}>
+      {/* HOW IT WORKS RESPONSIVE */}
+      <section style={{ padding: 'clamp(60px, 15vw, 120px) clamp(20px, 5vw, 50px)', background: 'linear-gradient(180deg, #f5f8ff 0%, #f0f5ff 100%)' }}>
         <div style={{ maxWidth: '1200px', margin: '0 auto' }}>
-          <div style={{ textAlign: 'center', marginBottom: '80px' }}>
-            <h2 style={{ fontSize: '60px', fontWeight: '900', color: '#0f172a', marginBottom: '24px' }}>Comment ça fonctionne</h2>
+          <div style={{ textAlign: 'center', marginBottom: 'clamp(40px, 10vw, 80px)' }}>
+            <h2 style={{ 
+              fontSize: 'clamp(24px, 6vw, 60px)', 
+              fontWeight: '900', 
+              color: '#0f172a', 
+              marginBottom: '24px' 
+            }}>Comment ça fonctionne</h2>
           </div>
 
-          <div style={{ display: 'grid', gridTemplateColumns: 'repeat(4, 1fr)', gap: '30px', maxWidth: '1100px', margin: '0 auto' }}>
+          <div style={{ 
+            display: 'grid', 
+            gridTemplateColumns: 'repeat(auto-fit, minmax(clamp(150px, 40vw, 250px), 1fr))', 
+            gap: 'clamp(20px, 4vw, 30px)', 
+            maxWidth: '1100px', 
+            margin: '0 auto' 
+          }}>
             {[
               { num: '1', emoji: '📸', title: 'Capturez', desc: 'Prenez une photo du problème' },
               { num: '2', emoji: '💬', title: 'Décrivez', desc: 'Posez votre question' },
@@ -204,59 +374,164 @@ function LandingPage({ onStart }) {
               { num: '4', emoji: '✅', title: 'Agissez', desc: 'Obtenez des solutions précises' }
             ].map((step, idx) => (
               <div key={idx} style={{ textAlign: 'center', position: 'relative' }}>
-                <div style={{ width: '70px', height: '70px', background: 'linear-gradient(135deg, #1e3c72 0%, #2a5298 100%)', color: 'white', borderRadius: '16px', display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: '32px', fontWeight: '900', margin: '0 auto 24px', boxShadow: '0 10px 30px rgba(30,60,114,0.25)' }}>
+                <div style={{ 
+                  width: 'clamp(50px, 12vw, 70px)', 
+                  height: 'clamp(50px, 12vw, 70px)', 
+                  background: 'linear-gradient(135deg, #1e3c72 0%, #2a5298 100%)', 
+                  color: 'white', 
+                  borderRadius: '16px', 
+                  display: 'flex', 
+                  alignItems: 'center', 
+                  justifyContent: 'center', 
+                  fontSize: 'clamp(24px, 6vw, 32px)', 
+                  fontWeight: '900', 
+                  margin: '0 auto clamp(16px, 4vw, 24px)', 
+                  boxShadow: '0 10px 30px rgba(30,60,114,0.25)' 
+                }}>
                   {step.num}
                 </div>
-                <div style={{ fontSize: '42px', marginBottom: '16px' }}>{step.emoji}</div>
-                <h3 style={{ fontSize: '20px', fontWeight: '800', color: '#0f172a', marginBottom: '10px' }}>{step.title}</h3>
-                <p style={{ fontSize: '14px', color: '#666', fontWeight: '500' }}>{step.desc}</p>
-                {idx < 3 && <div style={{ position: 'absolute', right: '-15px', top: '50px', fontSize: '24px', color: 'rgba(30,60,114,0.2)' }}>→</div>}
+                <div style={{ fontSize: 'clamp(28px, 8vw, 42px)', marginBottom: 'clamp(12px, 3vw, 16px)' }}>{step.emoji}</div>
+                <h3 style={{ 
+                  fontSize: 'clamp(14px, 4vw, 20px)', 
+                  fontWeight: '800', 
+                  color: '#0f172a', 
+                  marginBottom: '10px' 
+                }}>{step.title}</h3>
+                <p style={{ 
+                  fontSize: 'clamp(12px, 3vw, 14px)', 
+                  color: '#666', 
+                  fontWeight: '500' 
+                }}>{step.desc}</p>
               </div>
             ))}
           </div>
         </div>
       </section>
 
-      {/* TRUST SECTION */}
-      <section style={{ padding: '100px 50px', background: 'white', textAlign: 'center' }}>
+      {/* TRUST SECTION RESPONSIVE */}
+      <section style={{ padding: 'clamp(60px, 15vw, 100px) clamp(20px, 5vw, 50px)', background: 'white', textAlign: 'center' }}>
         <div style={{ maxWidth: '900px', margin: '0 auto' }}>
-          <h2 style={{ fontSize: '48px', fontWeight: '900', color: '#0f172a', marginBottom: '20px' }}>Fait par des experts</h2>
-          <p style={{ fontSize: '18px', color: '#666', marginBottom: '60px', fontWeight: '500', lineHeight: '1.7' }}>
+          <h2 style={{ 
+            fontSize: 'clamp(24px, 6vw, 48px)', 
+            fontWeight: '900', 
+            color: '#0f172a', 
+            marginBottom: '20px' 
+          }}>Fait par des experts</h2>
+          <p style={{ 
+            fontSize: 'clamp(14px, 3.5vw, 18px)', 
+            color: '#666', 
+            marginBottom: 'clamp(40px, 10vw, 60px)', 
+            fontWeight: '500', 
+            lineHeight: '1.7' 
+          }}>
             Construit avec la technologie IA la plus avancée (Claude par Anthropic) et optimisé pour les professionnels de l'immobilier qui demandent la qualité.
           </p>
           
-          <div style={{ display: 'grid', gridTemplateColumns: 'repeat(3, 1fr)', gap: '40px', maxWidth: '800px', margin: '0 auto' }}>
+          <div style={{ 
+            display: 'grid', 
+            gridTemplateColumns: 'repeat(auto-fit, minmax(clamp(150px, 40vw, 250px), 1fr))', 
+            gap: 'clamp(30px, 6vw, 40px)', 
+            maxWidth: '800px', 
+            margin: '0 auto' 
+          }}>
             <div>
-              <div style={{ fontSize: '48px', fontWeight: '900', background: 'linear-gradient(135deg, #1e3c72 0%, #2a5298 100%)', backgroundClip: 'text', WebkitBackgroundClip: 'text', color: 'transparent' }}>{usersCount}+</div>
-              <div style={{ fontSize: '14px', color: '#666', fontWeight: '600', marginTop: '8px' }}>Utilisateurs actifs</div>
+              <div style={{ 
+                fontSize: 'clamp(32px, 8vw, 48px)', 
+                fontWeight: '900', 
+                background: 'linear-gradient(135deg, #1e3c72 0%, #2a5298 100%)', 
+                backgroundClip: 'text', 
+                WebkitBackgroundClip: 'text', 
+                color: 'transparent' 
+              }}>{usersCount}+</div>
+              <div style={{ 
+                fontSize: 'clamp(12px, 3vw, 14px)', 
+                color: '#666', 
+                fontWeight: '600', 
+                marginTop: '8px' 
+              }}>Utilisateurs actifs</div>
             </div>
             <div>
-              <div style={{ fontSize: '48px', fontWeight: '900', background: 'linear-gradient(135deg, #1e3c72 0%, #2a5298 100%)', backgroundClip: 'text', WebkitBackgroundClip: 'text', color: 'transparent' }}>{diagCount > 0 ? (diagCount / 1000).toFixed(1) : '0'}k+</div>
-              <div style={{ fontSize: '14px', color: '#666', fontWeight: '600', marginTop: '8px' }}>Diagnostics effectués</div>
+              <div style={{ 
+                fontSize: 'clamp(32px, 8vw, 48px)', 
+                fontWeight: '900', 
+                background: 'linear-gradient(135deg, #1e3c72 0%, #2a5298 100%)', 
+                backgroundClip: 'text', 
+                WebkitBackgroundClip: 'text', 
+                color: 'transparent' 
+              }}>{diagCount > 0 ? (diagCount / 1000).toFixed(1) : '0'}k+</div>
+              <div style={{ 
+                fontSize: 'clamp(12px, 3vw, 14px)', 
+                color: '#666', 
+                fontWeight: '600', 
+                marginTop: '8px' 
+              }}>Diagnostics effectués</div>
             </div>
             <div>
-              <div style={{ fontSize: '48px', fontWeight: '900', background: 'linear-gradient(135deg, #1e3c72 0%, #2a5298 100%)', backgroundClip: 'text', WebkitBackgroundClip: 'text', color: 'transparent' }}>{satisfactionCount}%</div>
-              <div style={{ fontSize: '14px', color: '#666', fontWeight: '600', marginTop: '8px' }}>Satisfaction client</div>
+              <div style={{ 
+                fontSize: 'clamp(32px, 8vw, 48px)', 
+                fontWeight: '900', 
+                background: 'linear-gradient(135deg, #1e3c72 0%, #2a5298 100%)', 
+                backgroundClip: 'text', 
+                WebkitBackgroundClip: 'text', 
+                color: 'transparent' 
+              }}>{satisfactionCount}%</div>
+              <div style={{ 
+                fontSize: 'clamp(12px, 3vw, 14px)', 
+                color: '#666', 
+                fontWeight: '600', 
+                marginTop: '8px' 
+              }}>Satisfaction client</div>
             </div>
           </div>
         </div>
       </section>
 
-      {/* FOOTER PREMIUM */}
-      <footer style={{ padding: '60px 50px', background: 'linear-gradient(180deg, #0f172a 0%, #1a2847 100%)', color: 'white', textAlign: 'center', position: 'relative', overflow: 'hidden' }}>
-        <div style={{ position: 'absolute', top: '-50%', right: '-10%', width: '400px', height: '400px', background: 'radial-gradient(circle, rgba(255,255,255,0.05) 0%, transparent 70%)', borderRadius: '50%' }}></div>
+      {/* FOOTER RESPONSIVE */}
+      <footer style={{ 
+        padding: 'clamp(40px, 8vw, 60px) clamp(20px, 5vw, 50px)', 
+        background: 'linear-gradient(180deg, #0f172a 0%, #1a2847 100%)', 
+        color: 'white', 
+        textAlign: 'center', 
+        position: 'relative', 
+        overflow: 'hidden' 
+      }}>
+        <div style={{ 
+          position: 'absolute', 
+          top: '-50%', 
+          right: '-10%', 
+          width: 'clamp(300px, 50vw, 400px)', 
+          height: 'clamp(300px, 50vw, 400px)', 
+          background: 'radial-gradient(circle, rgba(255,255,255,0.05) 0%, transparent 70%)', 
+          borderRadius: '50%' 
+        }}></div>
         
         <div style={{ position: 'relative', zIndex: 2 }}>
-          <div style={{ fontSize: '18px', fontWeight: '600', marginBottom: '12px', letterSpacing: '0.5px' }}>
+          <div style={{ 
+            fontSize: 'clamp(14px, 4vw, 18px)', 
+            fontWeight: '600', 
+            marginBottom: '12px', 
+            letterSpacing: '0.5px' 
+          }}>
             🏢 Assistant Immobilier
           </div>
-          <div style={{ fontSize: '14px', color: 'rgba(255,255,255,0.85)', marginBottom: '30px', fontWeight: '500' }}>
+          <div style={{ 
+            fontSize: 'clamp(12px, 3vw, 14px)', 
+            color: 'rgba(255,255,255,0.85)', 
+            marginBottom: '30px', 
+            fontWeight: '500' 
+          }}>
             Diagnostic IA instantané pour l'immobilier
           </div>
           
           <div style={{ height: '1px', background: 'rgba(255,255,255,0.1)', margin: '30px 0' }}></div>
           
-          <p style={{ fontSize: '13px', color: 'rgba(255,255,255,0.7)', marginTop: '30px', fontWeight: '500', letterSpacing: '0.3px' }}>
+          <p style={{ 
+            fontSize: 'clamp(11px, 2.5vw, 13px)', 
+            color: 'rgba(255,255,255,0.7)', 
+            marginTop: '30px', 
+            fontWeight: '500', 
+            letterSpacing: '0.3px' 
+          }}>
             © 2025 Réalisé par <span style={{ fontWeight: '800', color: 'white' }}>Ali WARI</span>
           </p>
         </div>
@@ -265,7 +540,7 @@ function LandingPage({ onStart }) {
   );
 }
 
-// ===== TON APP PRINCIPALE =====
+// ===== APP PRINCIPALE =====
 export default function Home() {
   const [user, setUser] = useState(null);
   const [loading, setLoading] = useState(true);
@@ -1072,11 +1347,11 @@ export default function Home() {
   if (!user) {
     return (
       <>
-        <Head><title>Assistant Immobilier - Diagnostic IA</title></Head>
+        <Head><title>Assistant Immobilier - Diagnostic IA</title><meta name="viewport" content="width=device-width, initial-scale=1.0" /></Head>
         <LandingPage onStart={() => setAuthPage(true)} />
         
         {authPage && (
-          <div style={{ position: 'fixed', top: 0, left: 0, right: 0, bottom: 0, background: 'rgba(0,0,0,0.5)', display: 'flex', alignItems: 'center', justifyContent: 'center', zIndex: 1000, padding: '20px' }}>
+          <div style={{ position: 'fixed', top: 0, left: 0, right: 0, bottom: 0, background: 'rgba(0,0,0,0.5)', display: 'flex', alignItems: 'center', justifyContent: 'center', zIndex: 1000, padding: 'clamp(20px, 5vw, 20px)' }}>
             <div style={{ background: containerBg, borderRadius: '20px', padding: 'clamp(24px, 5vw, 40px)', maxWidth: '400px', width: '100%', boxShadow: '0 25px 80px rgba(0,0,0,0.35)' }}>
               <h1 style={{ fontSize: 'clamp(20px, 5vw, 28px)', textAlign: 'center', color: textColor, marginBottom: '24px' }}>🏢 Se Connecter</h1>
               <div style={{ display: 'flex', gap: '10px', marginBottom: '20px' }}>
@@ -1098,6 +1373,7 @@ export default function Home() {
     );
   }
 
+  // APP COMPLÈTE (reste du code identique)
   return (
     <>
       <Head><title>Assistant Immobilier</title><meta name="viewport" content="width=device-width, initial-scale=1" /></Head>
