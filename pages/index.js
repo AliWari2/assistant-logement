@@ -14,12 +14,12 @@ const TEMPLATES = [
 ];
 
 const TAGS = [
-  { icon: '💧', label: 'Plomberie', color: '#3b82f6' },
-  { icon: '🌡️', label: 'Chauffage', color: '#ef4444' },
-  { icon: '⚡', label: 'Électricité', color: '#f59e0b' },
-  { icon: '🪟', label: 'Isolation', color: '#10b981' },
-  { icon: '🔊', label: 'Bruit', color: '#8b5cf6' },
-  { icon: '🏠', label: 'Généraliste', color: '#6b7280' }
+  { icon: '💧', label: 'Plomberie', color: '#3b82f6', bgColor: 'rgba(59, 130, 246, 0.1)' },
+  { icon: '🌡️', label: 'Chauffage', color: '#ef4444', bgColor: 'rgba(239, 68, 68, 0.1)' },
+  { icon: '⚡', label: 'Électricité', color: '#f59e0b', bgColor: 'rgba(245, 158, 11, 0.1)' },
+  { icon: '🪟', label: 'Isolation', color: '#10b981', bgColor: 'rgba(16, 185, 129, 0.1)' },
+  { icon: '🔊', label: 'Bruit', color: '#8b5cf6', bgColor: 'rgba(139, 92, 246, 0.1)' },
+  { icon: '🏠', label: 'Généraliste', color: '#6b7280', bgColor: 'rgba(107, 114, 128, 0.1)' }
 ];
 
 const detectTag = (text) => {
@@ -85,7 +85,6 @@ function LandingPage({ onStart }) {
         html { scroll-behavior: smooth; }
       `}</style>
 
-      {/* NAVBAR RESPONSIVE */}
       <nav style={{ 
         position: 'sticky', 
         top: 0, 
@@ -114,7 +113,6 @@ function LandingPage({ onStart }) {
         </div>
       </nav>
 
-      {/* HERO SECTION RESPONSIVE */}
       <section style={{ 
         padding: 'clamp(60px, 15vw, 160px) clamp(20px, 5vw, 50px) clamp(60px, 15vw, 140px)', 
         textAlign: 'center', 
@@ -122,7 +120,6 @@ function LandingPage({ onStart }) {
         position: 'relative', 
         overflow: 'hidden' 
       }}>
-        {/* BACKGROUND ELEMENTS */}
         <div style={{ 
           position: 'absolute', 
           top: '-10%', 
@@ -145,7 +142,6 @@ function LandingPage({ onStart }) {
         }}></div>
         
         <div style={{ maxWidth: '1000px', margin: '0 auto', position: 'relative', zIndex: 2 }}>
-          {/* BADGE */}
           <div style={{ 
             fontSize: 'clamp(11px, 2vw, 13px)', 
             fontWeight: '700', 
@@ -162,7 +158,6 @@ function LandingPage({ onStart }) {
             ✨ Solution IA pour l'Immobilier
           </div>
           
-          {/* MAIN HEADLINE */}
           <h1 style={{ 
             fontSize: 'clamp(28px, 8vw, 84px)', 
             fontWeight: '900', 
@@ -179,7 +174,6 @@ function LandingPage({ onStart }) {
             }}>10 Secondes</span>
           </h1>
           
-          {/* SUBHEADLINE */}
           <p style={{ 
             fontSize: 'clamp(14px, 3vw, 20px)', 
             color: '#4a5568', 
@@ -192,7 +186,6 @@ function LandingPage({ onStart }) {
             Diagnostic immobilier instantané avec Claude. Analysez les photos, identifiez les problèmes et recevez des solutions en temps réel.
           </p>
 
-          {/* CTA BUTTON */}
           <button onClick={onStart} style={{ 
             padding: 'clamp(12px, 3vw, 16px) clamp(32px, 8vw, 48px)', 
             background: 'linear-gradient(135deg, #1e3c72 0%, #2a5298 100%)', 
@@ -204,16 +197,15 @@ function LandingPage({ onStart }) {
             cursor: 'pointer', 
             marginBottom: 'clamp(40px, 8vw, 60px)',
             boxShadow: '0 10px 40px rgba(30,60,114,0.3)', 
-            transition: 'all 0.3s'
+            transition: 'all 0.3s',
+            position: 'relative',
+            overflow: 'hidden'
           }} 
           onMouseOver={(e) => { if (typeof window !== 'undefined' && window.innerWidth > 768) e.target.style.transform = 'scale(1.05)'; }} 
-          onMouseOut={(e) => { if (typeof window !== 'undefined' && window.innerWidth > 768) e.target.style.transform = 'scale(1)'; }}
-          onTouchStart={(e) => { e.target.style.transform = 'scale(0.98)'; }}
-          onTouchEnd={(e) => { e.target.style.transform = 'scale(1)'; }}>
+          onMouseOut={(e) => { if (typeof window !== 'undefined' && window.innerWidth > 768) e.target.style.transform = 'scale(1)'; }}>
             🚀 Commencer le Diagnostic
           </button>
 
-          {/* STATS SECTION */}
           <div style={{ 
             display: 'grid', 
             gridTemplateColumns: 'repeat(auto-fit, minmax(clamp(100px, 25vw, 200px), 1fr))', 
@@ -286,7 +278,6 @@ function LandingPage({ onStart }) {
         </div>
       </section>
 
-      {/* FEATURES SECTION RESPONSIVE */}
       <section style={{ padding: 'clamp(60px, 15vw, 120px) clamp(20px, 5vw, 50px)', background: 'white' }}>
         <div style={{ maxWidth: '1200px', margin: '0 auto' }}>
           <div style={{ textAlign: 'center', marginBottom: 'clamp(40px, 10vw, 80px)' }}>
@@ -318,15 +309,14 @@ function LandingPage({ onStart }) {
               { icon: '📊', title: 'Historique Complet', desc: 'Conservez tous vos diagnostics et suivez l\'historique' },
               { icon: '🔒', title: 'Données Sécurisées', desc: 'Vos données protégées avec chiffrement de niveau entreprise' }
             ].map((feat, i) => (
-              <div key={i} onMouseEnter={() => setHoveredCard(i)} onMouseLeave={() => setHoveredCard(null)} style={{ 
+              <div key={i} style={{ 
                 padding: 'clamp(24px, 5vw, 44px)', 
-                background: hoveredCard === i ? 'linear-gradient(135deg, #f0f5ff 0%, #f8faff 100%)' : '#f9fafb', 
-                border: hoveredCard === i ? '2px solid #2a5298' : '2px solid #f0f0f0', 
+                background: '#f9fafb', 
+                border: '2px solid #f0f0f0', 
                 borderRadius: '18px', 
                 cursor: 'pointer', 
                 transition: 'all 0.4s cubic-bezier(0.2, 0, 0, 1)', 
-                transform: hoveredCard === i ? 'translateY(-12px)' : 'translateY(0)', 
-                boxShadow: hoveredCard === i ? '0 25px 50px rgba(30,60,114,0.15)' : '0 5px 15px rgba(0,0,0,0.03)' 
+                boxShadow: '0 5px 15px rgba(0,0,0,0.03)' 
               }}>
                 <div style={{ fontSize: 'clamp(32px, 8vw, 48px)', marginBottom: '20px' }}>{feat.icon}</div>
                 <h3 style={{ 
@@ -348,7 +338,6 @@ function LandingPage({ onStart }) {
         </div>
       </section>
 
-      {/* HOW IT WORKS RESPONSIVE */}
       <section style={{ padding: 'clamp(60px, 15vw, 120px) clamp(20px, 5vw, 50px)', background: 'linear-gradient(180deg, #f5f8ff 0%, #f0f5ff 100%)' }}>
         <div style={{ maxWidth: '1200px', margin: '0 auto' }}>
           <div style={{ textAlign: 'center', marginBottom: 'clamp(40px, 10vw, 80px)' }}>
@@ -408,7 +397,6 @@ function LandingPage({ onStart }) {
         </div>
       </section>
 
-      {/* TRUST SECTION RESPONSIVE */}
       <section style={{ padding: 'clamp(60px, 15vw, 100px) clamp(20px, 5vw, 50px)', background: 'white', textAlign: 'center' }}>
         <div style={{ maxWidth: '900px', margin: '0 auto' }}>
           <h2 style={{ 
@@ -442,7 +430,7 @@ function LandingPage({ onStart }) {
                 backgroundClip: 'text', 
                 WebkitBackgroundClip: 'text', 
                 color: 'transparent' 
-              }}>{usersCount}+</div>
+              }}>500+</div>
               <div style={{ 
                 fontSize: 'clamp(12px, 3vw, 14px)', 
                 color: '#666', 
@@ -458,7 +446,7 @@ function LandingPage({ onStart }) {
                 backgroundClip: 'text', 
                 WebkitBackgroundClip: 'text', 
                 color: 'transparent' 
-              }}>{diagCount > 0 ? (diagCount / 1000).toFixed(1) : '0'}k+</div>
+              }}>10k+</div>
               <div style={{ 
                 fontSize: 'clamp(12px, 3vw, 14px)', 
                 color: '#666', 
@@ -474,7 +462,7 @@ function LandingPage({ onStart }) {
                 backgroundClip: 'text', 
                 WebkitBackgroundClip: 'text', 
                 color: 'transparent' 
-              }}>{satisfactionCount}%</div>
+              }}>99%</div>
               <div style={{ 
                 fontSize: 'clamp(12px, 3vw, 14px)', 
                 color: '#666', 
@@ -486,7 +474,6 @@ function LandingPage({ onStart }) {
         </div>
       </section>
 
-      {/* FOOTER RESPONSIVE */}
       <footer style={{ 
         padding: 'clamp(40px, 8vw, 60px) clamp(20px, 5vw, 50px)', 
         background: 'linear-gradient(180deg, #0f172a 0%, #1a2847 100%)', 
@@ -540,6 +527,210 @@ function LandingPage({ onStart }) {
   );
 }
 
+// ===== ONBOARDING TOOLTIP COMPONENT =====
+function OnboardingTooltip({ shown, onDismiss }) {
+  if (!shown) return null;
+  return (
+    <div style={{
+      position: 'fixed',
+      bottom: '100px',
+      left: '50%',
+      transform: 'translateX(-50%)',
+      background: 'linear-gradient(135deg, #1e3c72 0%, #2a5298 100%)',
+      color: 'white',
+      padding: '16px 24px',
+      borderRadius: '12px',
+      boxShadow: '0 20px 60px rgba(30,60,114,0.4)',
+      zIndex: 10000,
+      maxWidth: '350px',
+      textAlign: 'center',
+      animation: 'slideUp 0.5s ease-out',
+      backdropFilter: 'blur(10px)',
+    }}>
+      <style jsx>{`
+        @keyframes slideUp {
+          from {
+            opacity: 0;
+            transform: translateX(-50%) translateY(20px);
+          }
+          to {
+            opacity: 1;
+            transform: translateX(-50%) translateY(0);
+          }
+        }
+      `}</style>
+      <p style={{ fontSize: '14px', fontWeight: '600', marginBottom: '8px' }}>
+        👋 Bienvenue! Cliquez sur <strong>"+ Nouvelle"</strong> pour créer votre première conversation.
+      </p>
+      <button 
+        onClick={onDismiss}
+        style={{
+          background: 'rgba(255,255,255,0.2)',
+          color: 'white',
+          border: 'none',
+          padding: '6px 16px',
+          borderRadius: '6px',
+          cursor: 'pointer',
+          fontSize: '12px',
+          fontWeight: '600',
+          marginTop: '8px'
+        }}
+      >
+        Compris! ✓
+      </button>
+    </div>
+  );
+}
+
+// ===== EMPTY STATE COMPONENT =====
+function EmptyState({ darkMode }) {
+  const bgGradient = darkMode ? 'linear-gradient(135deg, #0f172a 0%, #1a2847 100%)' : 'linear-gradient(135deg, #1e3c72 0%, #2a5298 100%)';
+  const textColor = darkMode ? '#e2e8f0' : '#1a1a1a';
+  
+  return (
+    <div style={{
+      display: 'flex',
+      flexDirection: 'column',
+      alignItems: 'center',
+      justifyContent: 'center',
+      height: '100%',
+      padding: '40px 20px',
+      textAlign: 'center',
+      background: darkMode ? 'linear-gradient(to bottom, #0f172a 0%, #1a2847 100%)' : 'linear-gradient(to bottom, #fafbfc 0%, #ffffff 100%)',
+    }}>
+      <div style={{
+        fontSize: '80px',
+        marginBottom: '20px',
+        animation: 'float 3s ease-in-out infinite',
+      }}>
+        🏠
+      </div>
+      <h2 style={{
+        fontSize: '24px',
+        fontWeight: '700',
+        color: textColor,
+        marginBottom: '12px',
+      }}>
+        Bienvenue!
+      </h2>
+      <p style={{
+        fontSize: '16px',
+        color: darkMode ? '#94a3b8' : '#666',
+        marginBottom: '30px',
+        maxWidth: '400px',
+        lineHeight: '1.6',
+      }}>
+        Créez votre première conversation de diagnostic immobilier. Décrivez votre problème ou uploadez une photo!
+      </p>
+      
+      <div style={{
+        display: 'grid',
+        gridTemplateColumns: '1fr 1fr',
+        gap: '16px',
+        maxWidth: '350px',
+        width: '100%',
+        marginTop: '20px',
+      }}>
+        <div style={{
+          padding: '16px',
+          background: 'rgba(59, 130, 246, 0.1)',
+          borderRadius: '12px',
+          border: '1px solid rgba(59, 130, 246, 0.2)',
+        }}>
+          <div style={{ fontSize: '28px', marginBottom: '8px' }}>📸</div>
+          <div style={{ fontSize: '12px', fontWeight: '600', color: '#3b82f6' }}>Upload Photo</div>
+        </div>
+        <div style={{
+          padding: '16px',
+          background: 'rgba(239, 68, 68, 0.1)',
+          borderRadius: '12px',
+          border: '1px solid rgba(239, 68, 68, 0.2)',
+        }}>
+          <div style={{ fontSize: '28px', marginBottom: '8px' }}>💬</div>
+          <div style={{ fontSize: '12px', fontWeight: '600', color: '#ef4444' }}>Décrivez</div>
+        </div>
+      </div>
+
+      <style jsx>{`
+        @keyframes float {
+          0%, 100% { transform: translateY(0px); }
+          50% { transform: translateY(-20px); }
+        }
+      `}</style>
+    </div>
+  );
+}
+
+// ===== RIPPLE EFFECT BUTTON HOOK =====
+const RippleButton = ({ children, onClick, style, className, disabled, ...props }) => {
+  const [ripples, setRipples] = useState([]);
+  const buttonRef = useRef(null);
+
+  const handleClick = (e) => {
+    if (disabled) return;
+    
+    const button = buttonRef.current;
+    const rect = button.getBoundingClientRect();
+    const x = e.clientX - rect.left;
+    const y = e.clientY - rect.top;
+    
+    const ripple = {
+      id: Date.now(),
+      x,
+      y,
+      size: Math.max(rect.width, rect.height),
+    };
+
+    setRipples([...ripples, ripple]);
+    setTimeout(() => {
+      setRipples(prev => prev.filter(r => r.id !== ripple.id));
+    }, 600);
+
+    onClick && onClick(e);
+  };
+
+  return (
+    <button
+      ref={buttonRef}
+      onClick={handleClick}
+      style={{
+        position: 'relative',
+        overflow: 'hidden',
+        ...style,
+      }}
+      className={className}
+      disabled={disabled}
+      {...props}
+    >
+      {ripples.map(ripple => (
+        <div
+          key={ripple.id}
+          style={{
+            position: 'absolute',
+            width: ripple.size * 2,
+            height: ripple.size * 2,
+            borderRadius: '50%',
+            background: 'rgba(255, 255, 255, 0.5)',
+            left: ripple.x - ripple.size,
+            top: ripple.y - ripple.size,
+            animation: 'ripple 0.6s ease-out',
+            pointerEvents: 'none',
+          }}
+        />
+      ))}
+      <style jsx>{`
+        @keyframes ripple {
+          to {
+            transform: scale(1);
+            opacity: 0;
+          }
+        }
+      `}</style>
+      {children}
+    </button>
+  );
+};
+
 // ===== APP PRINCIPALE =====
 export default function Home() {
   const [user, setUser] = useState(null);
@@ -585,6 +776,7 @@ export default function Home() {
   const [problemScoring, setProblemScoring] = useState({});
   const [uploadedFile, setUploadedFile] = useState(null);
   const [uploadPreview, setUploadPreview] = useState(null);
+  const [showOnboarding, setShowOnboarding] = useState(false);
 
   const messagesEndRef = useRef(null);
   const autoSaveTimer = useRef(null);
@@ -635,6 +827,13 @@ export default function Home() {
         loadConversations(currentUser.uid);
         loadHistoryFromConversations(currentUser.uid);
         setSessionTimeLeft(300);
+        
+        // Show onboarding si c'est la première visite
+        const hasVisited = localStorage.getItem('hasVisited');
+        if (!hasVisited) {
+          setShowOnboarding(true);
+          localStorage.setItem('hasVisited', 'true');
+        }
       }
       setLoading(false);
     });
@@ -860,6 +1059,11 @@ export default function Home() {
   const getTagColor = (tagLabel) => {
     const tag = TAGS.find(t => t.label === tagLabel);
     return tag ? tag.color : '#6b7280';
+  };
+
+  const getTagBgColor = (tagLabel) => {
+    const tag = TAGS.find(t => t.label === tagLabel);
+    return tag ? tag.bgColor : 'rgba(107, 114, 128, 0.1)';
   };
 
   const regenerateResponse = async (msgIndex) => {
@@ -1355,17 +1559,35 @@ export default function Home() {
             <div style={{ background: containerBg, borderRadius: '20px', padding: 'clamp(24px, 5vw, 40px)', maxWidth: '400px', width: '100%', boxShadow: '0 25px 80px rgba(0,0,0,0.35)' }}>
               <h1 style={{ fontSize: 'clamp(20px, 5vw, 28px)', textAlign: 'center', color: textColor, marginBottom: '24px' }}>🏢 Se Connecter</h1>
               <div style={{ display: 'flex', gap: '10px', marginBottom: '20px' }}>
-                <button onClick={() => setIsSignUp(false)} style={{ flex: 1, padding: '12px', background: !isSignUp ? bgGradient : secondaryBg, color: !isSignUp ? 'white' : textColor, border: 'none', borderRadius: '10px', fontWeight: '600', cursor: 'pointer', fontSize: 'clamp(12px, 2vw, 14px)' }}>Connexion</button>
-                <button onClick={() => setIsSignUp(true)} style={{ flex: 1, padding: '12px', background: isSignUp ? bgGradient : secondaryBg, color: isSignUp ? 'white' : textColor, border: 'none', borderRadius: '10px', fontWeight: '600', cursor: 'pointer', fontSize: 'clamp(12px, 2vw, 14px)' }}>Inscription</button>
+                <RippleButton 
+                  onClick={() => setIsSignUp(false)} 
+                  style={{ flex: 1, padding: '12px', background: !isSignUp ? bgGradient : secondaryBg, color: !isSignUp ? 'white' : textColor, border: 'none', borderRadius: '10px', fontWeight: '600', cursor: 'pointer', fontSize: 'clamp(12px, 2vw, 14px)' }}>
+                  Connexion
+                </RippleButton>
+                <RippleButton 
+                  onClick={() => setIsSignUp(true)} 
+                  style={{ flex: 1, padding: '12px', background: isSignUp ? bgGradient : secondaryBg, color: isSignUp ? 'white' : textColor, border: 'none', borderRadius: '10px', fontWeight: '600', cursor: 'pointer', fontSize: 'clamp(12px, 2vw, 14px)' }}>
+                  Inscription
+                </RippleButton>
               </div>
               {authError && <div style={{ background: '#fee', color: '#c00', padding: '12px', borderRadius: '8px', marginBottom: '20px', fontSize: '14px' }}>{authError}</div>}
               <div style={{ display: 'flex', flexDirection: 'column', gap: '12px', marginBottom: '20px' }}>
                 <input type="email" placeholder="Email" value={email} onChange={(e) => setEmail(e.target.value)} style={{ padding: '12px', border: `1.5px solid ${borderColor}`, borderRadius: '10px', background: containerBg, color: textColor, fontSize: 'clamp(12px, 2vw, 14px)' }} />
                 <input type="password" placeholder="Mot de passe" value={password} onChange={(e) => setPassword(e.target.value)} style={{ padding: '12px', border: `1.5px solid ${borderColor}`, borderRadius: '10px', background: containerBg, color: textColor, fontSize: 'clamp(12px, 2vw, 14px)' }} />
-                <button onClick={isSignUp ? handleSignUp : handleSignIn} disabled={authLoading} style={{ padding: '12px', background: bgGradient, color: 'white', border: 'none', borderRadius: '10px', fontWeight: '600', cursor: 'pointer', opacity: authLoading ? 0.6 : 1, fontSize: 'clamp(12px, 2vw, 14px)' }}>{authLoading ? '...' : (isSignUp ? 'S\'inscrire' : 'Se connecter')}</button>
+                <RippleButton 
+                  onClick={isSignUp ? handleSignUp : handleSignIn} 
+                  disabled={authLoading} 
+                  style={{ padding: '12px', background: bgGradient, color: 'white', border: 'none', borderRadius: '10px', fontWeight: '600', cursor: 'pointer', opacity: authLoading ? 0.6 : 1, fontSize: 'clamp(12px, 2vw, 14px)' }}>
+                  {authLoading ? '...' : (isSignUp ? 'S\'inscrire' : 'Se connecter')}
+                </RippleButton>
               </div>
               <div style={{ textAlign: 'center', marginBottom: '20px', color: '#999', fontSize: 'clamp(12px, 2vw, 14px)' }}>ou</div>
-              <button onClick={handleGuestLogin} disabled={authLoading} style={{ width: '100%', padding: '12px', background: secondaryBg, color: '#2a5298', border: '2px solid #2a5298', borderRadius: '10px', fontWeight: '600', cursor: 'pointer', fontSize: 'clamp(12px, 2vw, 14px)' }}>👤 Continuer en tant qu'invité</button>
+              <RippleButton 
+                onClick={handleGuestLogin} 
+                disabled={authLoading} 
+                style={{ width: '100%', padding: '12px', background: secondaryBg, color: '#2a5298', border: '2px solid #2a5298', borderRadius: '10px', fontWeight: '600', cursor: 'pointer', fontSize: 'clamp(12px, 2vw, 14px)' }}>
+                👤 Continuer en tant qu'invité
+              </RippleButton>
             </div>
           </div>
         )}
@@ -1373,7 +1595,6 @@ export default function Home() {
     );
   }
 
-  // APP COMPLÈTE (reste du code identique)
   return (
     <>
       <Head><title>Assistant Immobilier</title><meta name="viewport" content="width=device-width, initial-scale=1" /></Head>
@@ -1385,22 +1606,24 @@ export default function Home() {
         .sidebar-header { background: ${bgGradient}; color: white; padding: clamp(16px, 3vw, 20px); text-align: center; }
         .sidebar-header h2 { font-size: clamp(14px, 2.5vw, 16px); font-weight: 600; margin-bottom: 12px; }
         .stats-box { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; margin: 12px 0; }
-        .stat-item { background: rgba(255,255,255,0.2); padding: 8px; border-radius: 6px; text-align: center; color: white; font-size: 12px; }
-        .stat-number { font-weight: 700; font-size: 16px; }
-        .btn { width: 100%; padding: 10px; border: none; border-radius: 8px; cursor: pointer; font-weight: 600; font-size: clamp(12px, 2vw, 13px); margin-bottom: 8px; transition: all 0.2s; }
+        .stat-item { background: rgba(255,255,255,0.2); padding: 8px 10px; border-radius: 8px; text-align: center; color: white; font-size: 12px; border-left: 3px solid rgba(255,255,255,0.4); }
+        .stat-number { font-weight: 700; font-size: 18px; }
+        .stat-label { font-size: 11px; margin-top: 4px; opacity: 0.9; }
+        .btn { width: 100%; padding: 10px; border: none; border-radius: 8px; cursor: pointer; font-weight: 600; font-size: clamp(12px, 2vw, 13px); margin-bottom: 8px; transition: all 0.2s; position: relative; overflow: hidden; }
         .btn-new { background: ${containerBg}; color: #2a5298; }
-        .btn-new:hover { background: ${secondaryBg}; }
+        .btn-new:hover { background: ${secondaryBg}; transform: translateY(-2px); box-shadow: 0 4px 12px rgba(0,0,0,0.1); }
         .search-input { width: 100%; padding: 8px; border: 1px solid rgba(255,255,255,0.3); border-radius: 6px; background: rgba(255,255,255,0.2); color: white; margin-bottom: 12px; font-size: 12px; }
         .search-input::placeholder { color: rgba(255,255,255,0.6); }
         .btn-logout { background: #fee; color: #c00; margin-bottom: 0; }
         .conversations-list { flex: 1; overflow-y: auto; padding: 12px; }
         .conv-item { padding: 12px; margin-bottom: 8px; background: ${secondaryBg}; border-radius: 10px; cursor: pointer; border-left: 3px solid transparent; display: flex; justify-content: space-between; align-items: center; color: ${textColor}; font-size: 13px; transition: all 0.2s; }
-        .conv-item:hover { background: ${darkMode ? '#475569' : '#f0f2f5'}; }
-        .conv-item.active { background: ${darkMode ? '#1e3a5f' : '#e8f0ff'}; border-left-color: #2a5298; font-weight: 600; }
+        .conv-item:hover { background: ${darkMode ? '#475569' : '#f0f2f5'}; transform: translateX(4px); }
+        .conv-item.active { background: linear-gradient(135deg, #f0f5ff 0%, #f8faff 100%); border-left-color: #2a5298; font-weight: 600; box-shadow: 0 4px 12px rgba(42,82,152,0.15); }
         .conv-item.pinned { border-left-color: #fbbf24; }
         .conv-info { flex: 1; }
         .conv-title { margin-bottom: 4px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
         .conv-time { color: ${darkMode ? '#94a3b8' : '#999'}; font-size: 12px; }
+        .conv-tag-badge { display: inline-block; padding: 2px 8px; border-radius: 10px; font-size: 10px; font-weight: 700; margin-right: 6px; }
         .fav-btn { background: none; border: none; cursor: pointer; font-size: 16px; padding: 4px; transition: all 0.2s; }
         .fav-btn:hover { transform: scale(1.2); }
         .container { background: ${containerBg}; border-radius: 20px; box-shadow: 0 25px 80px rgba(0,0,0,0.35); display: flex; flex-direction: column; overflow: hidden; }
@@ -1413,10 +1636,10 @@ export default function Home() {
         .theme-toggle { background: rgba(255,255,255,0.2); border: none; color: white; padding: 8px 12px; border-radius: 6px; cursor: pointer; font-size: 16px; transition: all 0.2s; }
         .theme-toggle:hover { background: rgba(255,255,255,0.3); }
         .toolbar { padding: clamp(12px, 2vw, 12px) clamp(16px, 4vw, 24px); display: flex; gap: 10px; justify-content: flex-end; border-bottom: 1px solid ${borderColor}; background: ${containerBg}; flex-wrap: wrap; overflow-y: auto; }
-        .toolbar-btn { padding: 8px 12px; background: ${secondaryBg}; color: #2a5298; border: 1px solid ${borderColor}; border-radius: 8px; cursor: pointer; font-size: clamp(11px, 2vw, 13px); font-weight: 600; transition: all 0.2s; white-space: nowrap; }
-        .toolbar-btn:hover { background: ${darkMode ? '#475569' : '#e8f0ff'}; }
+        .toolbar-btn { padding: 8px 12px; background: ${secondaryBg}; color: #2a5298; border: 1px solid ${borderColor}; border-radius: 8px; cursor: pointer; font-size: clamp(11px, 2vw, 13px); font-weight: 600; transition: all 0.2s; white-space: nowrap; position: relative; overflow: hidden; }
+        .toolbar-btn:hover { background: ${darkMode ? '#475569' : '#e8f0ff'}; transform: translateY(-2px); box-shadow: 0 4px 12px rgba(42,82,152,0.2); }
         .templates-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(100px, 1fr)); gap: 8px; padding: 12px; }
-        .template-btn { padding: 12px 8px; background: ${secondaryBg}; color: #2a5298; border: 1px solid ${borderColor}; border-radius: 8px; cursor: pointer; font-size: clamp(11px, 2vw, 12px); transition: all 0.2s; }
+        .template-btn { padding: 12px 8px; background: ${secondaryBg}; color: #2a5298; border: 1px solid ${borderColor}; border-radius: 8px; cursor: pointer; font-size: clamp(11px, 2vw, 12px); transition: all 0.2s; position: relative; overflow: hidden; }
         .template-btn:hover { background: ${darkMode ? '#475569' : '#e8f0ff'}; }
         .messages-container { flex: 1; overflow-y: auto; padding: clamp(12px, 2vw, 24px); display: flex; flex-direction: column; gap: 14px; background: ${darkMode ? '#0f172a' : 'linear-gradient(to bottom, #fafbfc 0%, #ffffff 100%)'}; }
         .message { display: flex; gap: 10px; animation: slideIn 0.3s ease-out; }
@@ -1424,6 +1647,9 @@ export default function Home() {
         .message.user { justify-content: flex-end; }
         .msg-wrapper { display: flex; align-items: flex-start; gap: 8px; flex-direction: column; }
         .message.user .msg-wrapper { align-items: flex-end; }
+        .msg-avatar { width: 32px; height: 32px; border-radius: 8px; display: flex; align-items: center; justify-content: center; font-size: 16px; font-weight: 700; background: linear-gradient(135deg, #1e3c72 0%, #2a5298 100%); color: white; }
+        .message.user .msg-avatar { background: linear-gradient(135deg, #3b82f6 0%, #1e40af 100%); }
+        .message.assistant .msg-avatar { background: linear-gradient(135deg, #10b981 0%, #059669 100%); }
         .msg-content { max-width: 90%; padding: 14px 18px; border-radius: 14px; line-height: 1.65; font-size: clamp(12px, 2vw, 14px); word-break: break-word; box-shadow: 0 2px 8px rgba(0,0,0,0.08); }
         @media (min-width: 768px) { .msg-content { max-width: 70%; } }
         .message.assistant .msg-content { background: ${secondaryBg}; color: ${textColor}; border-left: 3px solid #2a5298; white-space: pre-wrap; }
@@ -1441,15 +1667,15 @@ export default function Home() {
         .reaction-emoji { cursor: pointer; padding: 4px; font-size: 18px; transition: all 0.2s; }
         .reaction-emoji:hover { transform: scale(1.2); }
         .suggestions { display: flex; gap: 8px; flex-wrap: wrap; margin-top: 8px; }
-        .suggestion-btn { padding: 6px 12px; background: ${secondaryBg}; color: #2a5298; border: 1px solid ${borderColor}; border-radius: 6px; cursor: pointer; font-size: clamp(11px, 2vw, 12px); transition: all 0.2s; white-space: nowrap; }
-        .suggestion-btn:hover { background: ${darkMode ? '#475569' : '#e8f0ff'}; }
+        .suggestion-btn { padding: 6px 12px; background: ${secondaryBg}; color: #2a5298; border: 1px solid ${borderColor}; border-radius: 6px; cursor: pointer; font-size: clamp(11px, 2vw, 12px); transition: all 0.2s; white-space: nowrap; position: relative; overflow: hidden; }
+        .suggestion-btn:hover { background: ${darkMode ? '#475569' : '#e8f0ff'}; transform: translateY(-2px); }
         .input-section { padding: clamp(12px, 2vw, 18px) clamp(12px, 3vw, 24px); border-top: 1px solid ${borderColor}; background: ${containerBg}; display: flex; gap: 12px; flex-direction: column; }
         .input-section input { flex: 1; padding: 12px 16px; border: 1.5px solid ${borderColor}; border-radius: 10px; background: ${containerBg}; color: ${textColor}; font-size: clamp(12px, 2vw, 14px); }
         .input-section input:focus { outline: none; border-color: #2a5298; box-shadow: 0 0 0 4px rgba(42,82,152,0.12); }
-        .send-btn { padding: 12px 28px; background: ${bgGradient}; color: white; border: none; border-radius: 10px; cursor: pointer; font-weight: 600; font-size: clamp(12px, 2vw, 14px); box-shadow: 0 4px 12px rgba(42,82,152,0.25); transition: all 0.3s; }
+        .send-btn { padding: 12px 28px; background: ${bgGradient}; color: white; border: none; border-radius: 10px; cursor: pointer; font-weight: 600; font-size: clamp(12px, 2vw, 14px); box-shadow: 0 4px 12px rgba(42,82,152,0.25); transition: all 0.3s; position: relative; overflow: hidden; }
         .send-btn:hover:not(:disabled) { transform: translateY(-2px); box-shadow: 0 6px 16px rgba(42,82,152,0.35); }
         .send-btn:disabled { opacity: 0.65; }
-        .voice-btn { padding: 12px 16px; background: ${isListening ? 'linear-gradient(135deg, #ef4444 0%, #dc2626 100%)' : bgGradient}; color: white; border: none; border-radius: 10px; cursor: pointer; font-weight: 600; font-size: 16px; box-shadow: 0 4px 12px rgba(42,82,152,0.25); transition: all 0.3s; animation: ${isListening ? 'voicePulse 1s infinite' : 'none'}; }
+        .voice-btn { padding: 12px 16px; background: ${isListening ? 'linear-gradient(135deg, #ef4444 0%, #dc2626 100%)' : bgGradient}; color: white; border: none; border-radius: 10px; cursor: pointer; font-weight: 600; font-size: 16px; box-shadow: 0 4px 12px rgba(42,82,152,0.25); transition: all 0.3s; animation: ${isListening ? 'voicePulse 1s infinite' : 'none'}; position: relative; overflow: hidden; }
         @keyframes voicePulse { 0%, 100% { transform: scale(1); } 50% { transform: scale(1.05); } }
         .voice-btn:hover { transform: ${isListening ? 'scale(1.05)' : 'translateY(-2px)'}; }
         .voice-interim { font-size: 12px; color: #2a5298; font-style: italic; margin-top: 4px; min-height: 16px; }
@@ -1467,8 +1693,9 @@ export default function Home() {
         .trend-label { font-weight: 600; }
         .trend-count { background: #3b82f6; color: white; padding: 4px 12px; border-radius: 12px; font-weight: 700; }
         .filter-tabs { display: flex; gap: 8px; margin-bottom: 16px; flex-wrap: wrap; }
-        .filter-tab { padding: 6px 12px; background: ${secondaryBg}; color: #2a5298; border: 1px solid ${borderColor}; border-radius: 6px; cursor: pointer; font-size: 12px; font-weight: 600; transition: all 0.2s; }
+        .filter-tab { padding: 6px 12px; background: ${secondaryBg}; color: #2a5298; border: 1px solid ${borderColor}; border-radius: 6px; cursor: pointer; font-size: 12px; font-weight: 600; transition: all 0.2s; position: relative; overflow: hidden; }
         .filter-tab.active { background: #2a5298; color: white; }
+        .filter-tab:hover { transform: translateY(-2px); }
         .toast { position: fixed; bottom: 30px; right: 30px; background: #22c55e; color: white; padding: 12px 20px; border-radius: 8px; box-shadow: 0 4px 12px rgba(0,0,0,0.2); z-index: 2000; animation: slideInUp 0.3s ease-out; }
         @keyframes slideInUp { from { opacity: 0; transform: translateY(20px); } to { opacity: 1; transform: translateY(0); } }
         .session-badge { position: fixed; top: 20px; right: 20px; background: #fbbf24; color: #000; padding: 8px 12px; border-radius: 6px; font-size: 12px; font-weight: 600; z-index: 999; }
@@ -1485,17 +1712,55 @@ export default function Home() {
         }
       `}</style>
 
+      <OnboardingTooltip shown={showOnboarding} onDismiss={() => setShowOnboarding(false)} />
+
       <div className="wrapper" style={{ gridTemplateColumns: readingMode ? '1fr' : '280px 1fr' }}>
         {!readingMode && (
           <div className="sidebar">
             <div className="sidebar-header">
               <h2>💬 Conversations</h2>
               <div className="stats-box">
-                <div className="stat-item"><div className="stat-number">{stats.totalConversations}</div><div>Conversations</div></div>
-                <div className="stat-item"><div className="stat-number">{stats.pinned}</div><div>Pinnées</div></div>
+                <div className="stat-item">
+                  <div className="stat-number">{stats.totalConversations}</div>
+                  <div className="stat-label">Total</div>
+                </div>
+                <div className="stat-item">
+                  <div className="stat-number">{stats.pinned}</div>
+                  <div className="stat-label">📌 Pin</div>
+                </div>
               </div>
-              <button className="btn btn-new" onClick={startNewConversation}>+ Nouvelle</button>
-              <button className="btn btn-new" onClick={() => setShowOnlyFavorites(!showOnlyFavorites)} style={{ background: showOnlyFavorites ? 'linear-gradient(135deg, #1e3c72 0%, #2a5298 100%)' : secondaryBg, color: showOnlyFavorites ? 'white' : '#2a5298' }}>{showOnlyFavorites ? '⭐' : '☆'} Favoris</button>
+              <RippleButton className="btn btn-new" onClick={startNewConversation} style={{
+                width: '100%',
+                padding: '10px',
+                border: 'none',
+                borderRadius: '8px',
+                cursor: 'pointer',
+                fontWeight: '600',
+                fontSize: 'clamp(12px, 2vw, 13px)',
+                marginBottom: '8px',
+                transition: 'all 0.2s',
+                background: containerBg,
+                color: '#2a5298',
+                position: 'relative',
+                overflow: 'hidden',
+              }}>+ Nouvelle</RippleButton>
+              <RippleButton className="btn btn-new" onClick={() => setShowOnlyFavorites(!showOnlyFavorites)} style={{
+                width: '100%',
+                padding: '10px',
+                border: 'none',
+                borderRadius: '8px',
+                cursor: 'pointer',
+                fontWeight: '600',
+                fontSize: 'clamp(12px, 2vw, 13px)',
+                marginBottom: '8px',
+                transition: 'all 0.2s',
+                background: showOnlyFavorites ? 'linear-gradient(135deg, #1e3c72 0%, #2a5298 100%)' : secondaryBg,
+                color: showOnlyFavorites ? 'white' : '#2a5298',
+                position: 'relative',
+                overflow: 'hidden',
+              }}>
+                {showOnlyFavorites ? '⭐' : '☆'} Favoris
+              </RippleButton>
               <input type="text" className="search-input" placeholder="🔍 Chercher..." value={searchQuery} onChange={(e) => setSearchQuery(e.target.value)} />
               <div style={{ padding: '8px 0', borderTop: `1px solid rgba(255,255,255,0.2)`, marginBottom: '12px' }}>
                 <div style={{ fontSize: '11px', color: 'rgba(255,255,255,0.6)', marginBottom: '6px', fontWeight: '600' }}>Filtrer par tag</div>
@@ -1506,7 +1771,23 @@ export default function Home() {
                   ))}
                 </div>
               </div>
-              <button className="btn btn-logout" onClick={handleLogout}>Déconnexion</button>
+              <RippleButton className="btn btn-logout" onClick={handleLogout} style={{
+                width: '100%',
+                padding: '10px',
+                border: 'none',
+                borderRadius: '8px',
+                cursor: 'pointer',
+                fontWeight: '600',
+                fontSize: 'clamp(12px, 2vw, 13px)',
+                marginBottom: '0',
+                transition: 'all 0.2s',
+                background: '#fee',
+                color: '#c00',
+                position: 'relative',
+                overflow: 'hidden',
+              }}>
+                Déconnexion
+              </RippleButton>
             </div>
             <div className="conversations-list">
               {filteredConversations.length === 0 ? (
@@ -1516,15 +1797,15 @@ export default function Home() {
                   <div key={conv.id}>
                     <div className={`conv-item ${currentConvId === conv.id ? 'active' : ''} ${conv.isPinned ? 'pinned' : ''}`}>
                       <div className="conv-info" onClick={() => loadConversation(conv)}>
+                        {conv.tag && (
+                          <span className="conv-tag-badge" style={{ background: getTagBgColor(conv.tag), color: getTagColor(conv.tag) }}>
+                            {TAGS.find(t => t.label === conv.tag)?.icon}
+                          </span>
+                        )}
                         <div className="conv-title">{conv.title}</div>
                         <div className="conv-time">{conv.createdAt?.toDate?.()?.toLocaleString?.('fr-FR', { hour: '2-digit', minute: '2-digit' }) || ''}</div>
                       </div>
                       <div style={{ display: 'flex', gap: '4px', alignItems: 'center' }}>
-                        {conv.tag && (
-                          <span style={{ background: getTagColor(conv.tag), color: 'white', padding: '2px 6px', borderRadius: '10px', fontSize: '10px', fontWeight: '600' }}>
-                            {TAGS.find(t => t.label === conv.tag)?.icon}
-                          </span>
-                        )}
                         <button className="fav-btn" onClick={(e) => { e.stopPropagation(); togglePin(conv.id); }} title={conv.isPinned ? 'Dépingler' : 'Pingler'} style={{ color: conv.isPinned ? '#fbbf24' : 'inherit' }}>📌</button>
                         <button className="fav-btn" onClick={(e) => { e.stopPropagation(); setShowTagPicker(showTagPicker === conv.id ? null : conv.id); }} title="Assigner un tag">🏷️</button>
                         <button className="fav-btn" onClick={(e) => { e.stopPropagation(); toggleFavorite(conv.id); }} title="Favoris">{conv.isFavorite ? '⭐' : '☆'}</button>
@@ -1534,7 +1815,9 @@ export default function Home() {
                     {showTagPicker === conv.id && (
                       <div style={{ marginTop: '8px', padding: '8px', background: 'rgba(255,255,255,0.1)', borderRadius: '6px', display: 'flex', gap: '4px', flexWrap: 'wrap', marginLeft: '12px', marginRight: '12px', marginBottom: '8px' }}>
                         {TAGS.map(tag => (
-                          <button key={tag.label} onClick={(e) => { e.stopPropagation(); assignTag(conv.id, tag.label); }} style={{ background: tag.color, color: 'white', border: 'none', padding: '4px 8px', borderRadius: '4px', fontSize: '11px', cursor: 'pointer', fontWeight: '500' }}>{tag.icon} {tag.label}</button>
+                          <RippleButton key={tag.label} onClick={(e) => { e.stopPropagation(); assignTag(conv.id, tag.label); }} style={{ background: tag.color, color: 'white', border: 'none', padding: '4px 8px', borderRadius: '4px', fontSize: '11px', cursor: 'pointer', fontWeight: '500', position: 'relative', overflow: 'hidden' }}>
+                            {tag.icon} {tag.label}
+                          </RippleButton>
                         ))}
                       </div>
                     )}
@@ -1554,96 +1837,105 @@ export default function Home() {
             <button className="theme-toggle" onClick={() => setDarkMode(!darkMode)} title="Activer le mode sombre">{darkMode ? '☀️' : '🌙'}</button>
           </div>
           <div className="toolbar">
-            <button onClick={() => setReadingMode(!readingMode)} className="toolbar-btn" style={{ background: readingMode ? 'linear-gradient(135deg, #1e3c72 0%, #2a5298 100%)' : secondaryBg, color: readingMode ? 'white' : '#2a5298' }}>📖 Lecture</button>
-            <button onClick={exportConversationTXT} className="toolbar-btn">📄 TXT</button>
-            <button onClick={exportConversationPDF} className="toolbar-btn">📑 PDF</button>
-            <button onClick={generateSynthesis} disabled={synthesisLoading} className="toolbar-btn">📋 Synthèse</button>
-            <button onClick={() => setShowAnalytics(true)} className="toolbar-btn">📊 Stats</button>
-            <button onClick={() => setShowHistoryModal(true)} className="toolbar-btn">📜 Historique</button>
-            <button onClick={generateShareLink} className="toolbar-btn">🔗 Partager</button>
-            <button onClick={() => setShowTemplates(!showTemplates)} className="toolbar-btn">⚡ Templates</button>
+            <RippleButton onClick={() => setReadingMode(!readingMode)} className="toolbar-btn" style={{ background: readingMode ? 'linear-gradient(135deg, #1e3c72 0%, #2a5298 100%)' : secondaryBg, color: readingMode ? 'white' : '#2a5298' }}>📖 Lecture</RippleButton>
+            <RippleButton onClick={exportConversationTXT} className="toolbar-btn">📄 TXT</RippleButton>
+            <RippleButton onClick={exportConversationPDF} className="toolbar-btn">📑 PDF</RippleButton>
+            <RippleButton onClick={generateSynthesis} disabled={synthesisLoading} className="toolbar-btn">📋 Synthèse</RippleButton>
+            <RippleButton onClick={() => setShowAnalytics(true)} className="toolbar-btn">📊 Stats</RippleButton>
+            <RippleButton onClick={() => setShowHistoryModal(true)} className="toolbar-btn">📜 Historique</RippleButton>
+            <RippleButton onClick={generateShareLink} className="toolbar-btn">🔗 Partager</RippleButton>
+            <RippleButton onClick={() => setShowTemplates(!showTemplates)} className="toolbar-btn">⚡ Templates</RippleButton>
           </div>
 
           {showTemplates && (
             <div style={{ padding: '0 clamp(16px, 3vw, 24px)', borderBottom: `1px solid ${borderColor}`, background: secondaryBg, overflow: 'x: auto' }}>
               <div className="templates-grid">
                 {TEMPLATES.map((t, i) => (
-                  <button key={i} className="template-btn" onClick={() => { setInput(t.text); setShowTemplates(false); }}>{t.icon} {t.label}</button>
+                  <RippleButton key={i} className="template-btn" onClick={() => { setInput(t.text); setShowTemplates(false); }}>{t.icon} {t.label}</RippleButton>
                 ))}
               </div>
             </div>
           )}
 
           <div className="messages-container">
-            {messages.map((msg, idx) => (
-              <div key={idx} className={`message ${msg.role}`}>
-                <div className="msg-wrapper">
-                  <div className="msg-content" dangerouslySetInnerHTML={{ __html: parseMarkdown(msg.content) }}></div>
-                  {msg.role === 'assistant' && (
-                    <div>
-                      <div className="msg-actions">
-                        <button className={`action-btn ${copiedId === idx ? 'active' : ''}`} onClick={() => copyToClipboard(msg.content, idx)} title="Copier">{copiedId === idx ? '✓' : '📋'}</button>
-                        <button className={`action-btn ${ratings[idx] === 'up' ? 'active' : ''}`} onClick={() => rateMessage(idx, 'up')} title="Utile">👍</button>
-                        <button className={`action-btn ${ratings[idx] === 'down' ? 'active' : ''}`} onClick={() => rateMessage(idx, 'down')} title="Pas utile">👎</button>
-                        <button className="action-btn" onClick={() => setShowReactionPicker(showReactionPicker === idx ? null : idx)} title="Réagir">😊</button>
-                        <button className="action-btn" onClick={() => regenerateResponse(idx)} disabled={regeneratingIndex === idx} title="Régénérer la réponse">
-                          {regeneratingIndex === idx ? '⏳' : '🔄'}
-                        </button>
-                      </div>
-                      {reactions[idx] && <div className="emoji-reaction">{reactions[idx]}</div>}
-                      {showReactionPicker === idx && (
-                        <div className="reaction-picker">
-                          {['😍', '🎉', '🤔', '👍', '👎', '❤️', '🔥', '😂'].map(e => (
-                            <button key={e} className="reaction-emoji" onClick={() => addReaction(idx, e)}>{e}</button>
-                          ))}
+            {messages.length === 1 && messages[0].role === 'assistant' && messages[0].content === 'Bonjour 👋' ? (
+              <EmptyState darkMode={darkMode} />
+            ) : (
+              <>
+                {messages.map((msg, idx) => (
+                  <div key={idx} className={`message ${msg.role}`}>
+                    <div className="msg-avatar">
+                      {msg.role === 'assistant' ? '🤖' : '👤'}
+                    </div>
+                    <div className="msg-wrapper">
+                      <div className="msg-content" dangerouslySetInnerHTML={{ __html: parseMarkdown(msg.content) }}></div>
+                      {msg.role === 'assistant' && (
+                        <div>
+                          <div className="msg-actions">
+                            <button className={`action-btn ${copiedId === idx ? 'active' : ''}`} onClick={() => copyToClipboard(msg.content, idx)} title="Copier">{copiedId === idx ? '✓' : '📋'}</button>
+                            <button className={`action-btn ${ratings[idx] === 'up' ? 'active' : ''}`} onClick={() => rateMessage(idx, 'up')} title="Utile">👍</button>
+                            <button className={`action-btn ${ratings[idx] === 'down' ? 'active' : ''}`} onClick={() => rateMessage(idx, 'down')} title="Pas utile">👎</button>
+                            <button className="action-btn" onClick={() => setShowReactionPicker(showReactionPicker === idx ? null : idx)} title="Réagir">😊</button>
+                            <button className="action-btn" onClick={() => regenerateResponse(idx)} disabled={regeneratingIndex === idx} title="Régénérer la réponse">
+                              {regeneratingIndex === idx ? '⏳' : '🔄'}
+                            </button>
+                          </div>
+                          {reactions[idx] && <div className="emoji-reaction">{reactions[idx]}</div>}
+                          {showReactionPicker === idx && (
+                            <div className="reaction-picker">
+                              {['😍', '🎉', '🤔', '👍', '👎', '❤️', '🔥', '😂'].map(e => (
+                                <button key={e} className="reaction-emoji" onClick={() => addReaction(idx, e)}>{e}</button>
+                              ))}
+                            </div>
+                          )}
                         </div>
                       )}
                     </div>
-                  )}
-                </div>
-              </div>
-            ))}
-            {chatLoading && <div className="message assistant"><div className="msg-content skeleton" style={{ height: '60px', borderRadius: '14px' }}></div></div>}
-            
-            {suggestions.length > 0 && !chatLoading && (
-              <div style={{ padding: '12px', background: secondaryBg, borderRadius: '8px', marginTop: '12px' }}>
-                <div style={{ fontSize: '12px', fontWeight: '600', marginBottom: '8px', color: '#2a5298' }}>💡 Suggestions :</div>
-                <div className="suggestions">
-                  {suggestions.map((s, i) => (
-                    <button key={i} className="suggestion-btn" onClick={() => { setInput(s); handleSendMessage({ preventDefault: () => {} }); }}>{s}</button>
-                  ))}
-                </div>
-              </div>
-            )}
-
-            {Object.keys(problemScoring).length > 0 && !chatLoading && (
-              <div style={{ padding: '16px', background: secondaryBg, borderRadius: '8px', marginTop: '12px', border: `2px solid ${problemScoring.urgencyColor || '#3b82f6'}` }}>
-                <div style={{ fontSize: '13px', fontWeight: '700', marginBottom: '12px', color: problemScoring.urgencyColor || '#2a5298', display: 'flex', alignItems: 'center', gap: '8px' }}>
-                  ⚡ ANALYSE DU PROBLÈME
-                </div>
+                  </div>
+                ))}
+                {chatLoading && <div className="message assistant"><div className="msg-avatar">🤖</div><div className="msg-content skeleton" style={{ height: '60px', borderRadius: '14px' }}></div></div>}
                 
-                <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '12px', marginBottom: '12px' }}>
-                  <div><div style={{ fontSize: '11px', color: '#999', fontWeight: '600', marginBottom: '4px' }}>🔴 URGENCE</div><div style={{ fontSize: '16px', fontWeight: '700', color: problemScoring.urgencyColor || '#ef4444', marginBottom: '4px' }}>{problemScoring.urgency}%</div><div style={{ fontSize: '12px', fontWeight: '600', color: problemScoring.urgencyColor }}>{problemScoring.urgencyLabel}</div></div>
-                  <div><div style={{ fontSize: '11px', color: '#999', fontWeight: '600', marginBottom: '4px' }}>💰 COÛT ESTIMÉ</div><div style={{ fontSize: '14px', fontWeight: '700', color: '#2a5298', marginBottom: '4px' }}>{problemScoring.estimatedCost}</div><div style={{ fontSize: '12px', color: '#666' }}>{problemScoring.costLevel}</div></div>
-                  <div><div style={{ fontSize: '11px', color: '#999', fontWeight: '600', marginBottom: '4px' }}>🔧 DIFFICULTÉ DIY</div><div style={{ display: 'flex', gap: '3px', marginBottom: '4px' }}>{[...Array(5)].map((_, i) => (<span key={i} style={{ fontSize: '14px', color: i < problemScoring.diyDifficulty ? '#fbbf24' : '#ddd' }}>⭐</span>))}</div><div style={{ fontSize: '12px', color: '#666' }}>{problemScoring.diyLabel}</div></div>
-                  <div><div style={{ fontSize: '11px', color: '#999', fontWeight: '600', marginBottom: '4px' }}>⏰ RÉSOLUTION</div><div style={{ fontSize: '14px', fontWeight: '700', color: '#2a5298', marginBottom: '4px' }}>{problemScoring.resolutionTime}</div><div style={{ fontSize: '12px', color: '#666' }}>Estimation</div></div>
-                </div>
-
-                {problemScoring.mainRisks && problemScoring.mainRisks.length > 0 && (
-                  <div style={{ borderTop: `1px solid ${borderColor}`, paddingTop: '12px' }}>
-                    <div style={{ fontSize: '11px', color: '#999', fontWeight: '600', marginBottom: '8px' }}>☠️ RISQUES PRINCIPAUX</div>
-                    <div style={{ display: 'flex', gap: '6px', flexWrap: 'wrap' }}>
-                      {problemScoring.mainRisks.map((risk, i) => (
-                        <span key={i} style={{ background: '#fee', color: '#c00', padding: '4px 10px', borderRadius: '12px', fontSize: '11px', fontWeight: '600' }}>⚠️ {risk}</span>
+                {suggestions.length > 0 && !chatLoading && (
+                  <div style={{ padding: '12px', background: secondaryBg, borderRadius: '8px', marginTop: '12px' }}>
+                    <div style={{ fontSize: '12px', fontWeight: '600', marginBottom: '8px', color: '#2a5298' }}>💡 Suggestions :</div>
+                    <div className="suggestions">
+                      {suggestions.map((s, i) => (
+                        <RippleButton key={i} className="suggestion-btn" onClick={() => { setInput(s); handleSendMessage({ preventDefault: () => {} }); }}>{s}</RippleButton>
                       ))}
                     </div>
                   </div>
                 )}
 
-                <div style={{ marginTop: '12px', padding: '8px 12px', background: problemScoring.urgency > 75 ? '#fee' : problemScoring.urgency > 50 ? '#fef3c7' : '#dbeafe', borderRadius: '6px', fontSize: '12px', fontWeight: '600', color: problemScoring.urgency > 75 ? '#c00' : problemScoring.urgency > 50 ? '#b45309' : '#1e40af' }}>
-                  📊 Priorité: <strong>{problemScoring.priority}</strong>
-                </div>
-              </div>
+                {Object.keys(problemScoring).length > 0 && !chatLoading && (
+                  <div style={{ padding: '16px', background: secondaryBg, borderRadius: '8px', marginTop: '12px', border: `2px solid ${problemScoring.urgencyColor || '#3b82f6'}` }}>
+                    <div style={{ fontSize: '13px', fontWeight: '700', marginBottom: '12px', color: problemScoring.urgencyColor || '#2a5298', display: 'flex', alignItems: 'center', gap: '8px' }}>
+                      ⚡ ANALYSE DU PROBLÈME
+                    </div>
+                    
+                    <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '12px', marginBottom: '12px' }}>
+                      <div><div style={{ fontSize: '11px', color: '#999', fontWeight: '600', marginBottom: '4px' }}>🔴 URGENCE</div><div style={{ fontSize: '16px', fontWeight: '700', color: problemScoring.urgencyColor || '#ef4444', marginBottom: '4px' }}>{problemScoring.urgency}%</div><div style={{ fontSize: '12px', fontWeight: '600', color: problemScoring.urgencyColor }}>{problemScoring.urgencyLabel}</div></div>
+                      <div><div style={{ fontSize: '11px', color: '#999', fontWeight: '600', marginBottom: '4px' }}>💰 COÛT ESTIMÉ</div><div style={{ fontSize: '14px', fontWeight: '700', color: '#2a5298', marginBottom: '4px' }}>{problemScoring.estimatedCost}</div><div style={{ fontSize: '12px', color: '#666' }}>{problemScoring.costLevel}</div></div>
+                      <div><div style={{ fontSize: '11px', color: '#999', fontWeight: '600', marginBottom: '4px' }}>🔧 DIFFICULTÉ DIY</div><div style={{ display: 'flex', gap: '3px', marginBottom: '4px' }}>{[...Array(5)].map((_, i) => (<span key={i} style={{ fontSize: '14px', color: i < problemScoring.diyDifficulty ? '#fbbf24' : '#ddd' }}>⭐</span>))}</div><div style={{ fontSize: '12px', color: '#666' }}>{problemScoring.diyLabel}</div></div>
+                      <div><div style={{ fontSize: '11px', color: '#999', fontWeight: '600', marginBottom: '4px' }}>⏰ RÉSOLUTION</div><div style={{ fontSize: '14px', fontWeight: '700', color: '#2a5298', marginBottom: '4px' }}>{problemScoring.resolutionTime}</div><div style={{ fontSize: '12px', color: '#666' }}>Estimation</div></div>
+                    </div>
+
+                    {problemScoring.mainRisks && problemScoring.mainRisks.length > 0 && (
+                      <div style={{ borderTop: `1px solid ${borderColor}`, paddingTop: '12px' }}>
+                        <div style={{ fontSize: '11px', color: '#999', fontWeight: '600', marginBottom: '8px' }}>☠️ RISQUES PRINCIPAUX</div>
+                        <div style={{ display: 'flex', gap: '6px', flexWrap: 'wrap' }}>
+                          {problemScoring.mainRisks.map((risk, i) => (
+                            <span key={i} style={{ background: '#fee', color: '#c00', padding: '4px 10px', borderRadius: '12px', fontSize: '11px', fontWeight: '600' }}>⚠️ {risk}</span>
+                          ))}
+                        </div>
+                      </div>
+                    )}
+
+                    <div style={{ marginTop: '12px', padding: '8px 12px', background: problemScoring.urgency > 75 ? '#fee' : problemScoring.urgency > 50 ? '#fef3c7' : '#dbeafe', borderRadius: '6px', fontSize: '12px', fontWeight: '600', color: problemScoring.urgency > 75 ? '#c00' : problemScoring.urgency > 50 ? '#b45309' : '#1e40af' }}>
+                      📊 Priorité: <strong>{problemScoring.priority}</strong>
+                    </div>
+                  </div>
+                )}
+              </>
             )}
             
             <div ref={messagesEndRef} />
@@ -1651,7 +1943,7 @@ export default function Home() {
 
           <div className="input-section">
             <div style={{ display: 'flex', gap: '8px', flexWrap: 'wrap' }}>
-              <button className="voice-btn" onClick={toggleVoiceRecognition} title={isListening ? 'Arrêter l\'écoute' : 'Parler'}>{isListening ? '🔴' : '🎤'}</button>
+              <RippleButton className="voice-btn" onClick={toggleVoiceRecognition} title={isListening ? 'Arrêter l\'écoute' : 'Parler'}>{isListening ? '🔴' : '🎤'}</RippleButton>
               <div style={{ flex: 1, minWidth: '200px' }}>
                 <div style={{ display: 'flex', gap: '8px', marginBottom: uploadPreview ? '8px' : '0', flexWrap: 'wrap' }}>
                   <input 
@@ -1688,7 +1980,7 @@ export default function Home() {
                 {voiceInterimText && <div className="voice-interim">🎙️ {voiceInterimText}</div>}
               </div>
             </div>
-            <button onClick={uploadPreview ? sendFileWithMessage : handleSendMessage} className="send-btn" disabled={chatLoading}>{chatLoading ? '...' : (uploadPreview ? 'Analyser' : 'Envoyer')}</button>
+            <RippleButton onClick={uploadPreview ? sendFileWithMessage : handleSendMessage} className="send-btn" disabled={chatLoading}>{chatLoading ? '...' : (uploadPreview ? 'Analyser' : 'Envoyer')}</RippleButton>
           </div>
         </div>
       </div>
@@ -1734,10 +2026,10 @@ export default function Home() {
             <div style={{ marginBottom: '20px' }}>
               <h3 style={{ fontSize: '14px', fontWeight: '600', marginBottom: '12px', color: '#2a5298' }}>Filtrer</h3>
               <div className="filter-tabs">
-                <button className={`filter-tab ${historyFilter === 'all' ? 'active' : ''}`} onClick={() => setHistoryFilter('all')}>Tous</button>
-                <button className={`filter-tab ${historyFilter === '7days' ? 'active' : ''}`} onClick={() => setHistoryFilter('7days')}>7 jours</button>
+                <RippleButton className={`filter-tab ${historyFilter === 'all' ? 'active' : ''}`} onClick={() => setHistoryFilter('all')}>Tous</RippleButton>
+                <RippleButton className={`filter-tab ${historyFilter === '7days' ? 'active' : ''}`} onClick={() => setHistoryFilter('7days')}>7 jours</RippleButton>
                 {TAGS.map(tag => (
-                  <button key={tag.label} className={`filter-tab ${historyFilter === tag.label ? 'active' : ''}`} onClick={() => setHistoryFilter(tag.label)}>{tag.icon} {tag.label}</button>
+                  <RippleButton key={tag.label} className={`filter-tab ${historyFilter === tag.label ? 'active' : ''}`} onClick={() => setHistoryFilter(tag.label)}>{tag.icon} {tag.label}</RippleButton>
                 ))}
               </div>
             </div>
@@ -1771,7 +2063,7 @@ export default function Home() {
             <div style={{ padding: '16px', background: secondaryBg, borderRadius: '8px', marginBottom: '16px' }}>
               <input type="text" readOnly value={shareLink} style={{ width: '100%', padding: '12px', border: `1px solid ${borderColor}`, borderRadius: '6px', background: containerBg, color: textColor, fontSize: '12px', wordBreak: 'break-all' }} />
             </div>
-            <button onClick={copyShareLink} style={{ width: '100%', padding: '12px', background: bgGradient, color: 'white', border: 'none', borderRadius: '8px', fontWeight: '600', cursor: 'pointer' }}>{copiedId === 'share' ? '✓ Copié !' : '📋 Copier le lien'}</button>
+            <RippleButton onClick={copyShareLink} style={{ width: '100%', padding: '12px', background: bgGradient, color: 'white', border: 'none', borderRadius: '8px', fontWeight: '600', cursor: 'pointer', position: 'relative', overflow: 'hidden' }}>{copiedId === 'share' ? '✓ Copié !' : '📋 Copier le lien'}</RippleButton>
           </div>
         </div>
       )}
@@ -1785,8 +2077,8 @@ export default function Home() {
               <div style={{ fontSize: '14px', lineHeight: '1.8', whiteSpace: 'pre-wrap' }} dangerouslySetInnerHTML={{ __html: parseMarkdown(synthesis) }}></div>
             </div>
             <div style={{ display: 'flex', gap: '10px' }}>
-              <button onClick={() => copyToClipboard(synthesis, 'synthesis')} style={{ flex: 1, padding: '12px', background: bgGradient, color: 'white', border: 'none', borderRadius: '8px', fontWeight: '600', cursor: 'pointer' }}>{copiedId === 'synthesis' ? '✓ Copié !' : '📋 Copier'}</button>
-              <button onClick={() => setShowSynthesisModal(false)} style={{ flex: 1, padding: '12px', background: secondaryBg, color: '#2a5298', border: `1px solid ${borderColor}`, borderRadius: '8px', fontWeight: '600', cursor: 'pointer' }}>Fermer</button>
+              <RippleButton onClick={() => copyToClipboard(synthesis, 'synthesis')} style={{ flex: 1, padding: '12px', background: bgGradient, color: 'white', border: 'none', borderRadius: '8px', fontWeight: '600', cursor: 'pointer', position: 'relative', overflow: 'hidden' }}>{copiedId === 'synthesis' ? '✓ Copié !' : '📋 Copier'}</RippleButton>
+              <RippleButton onClick={() => setShowSynthesisModal(false)} style={{ flex: 1, padding: '12px', background: secondaryBg, color: '#2a5298', border: `1px solid ${borderColor}`, borderRadius: '8px', fontWeight: '600', cursor: 'pointer', position: 'relative', overflow: 'hidden' }}>Fermer</RippleButton>
             </div>
           </div>
         </div>
