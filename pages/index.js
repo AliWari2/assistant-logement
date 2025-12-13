@@ -32,7 +32,7 @@ const detectTag = (text) => {
   return 'Généraliste';
 };
 
-// ===== LANDING PAGE PREMIUM V2 =====
+// ===== LANDING PAGE PREMIUM MOBILE RESPONSIVE =====
 function LandingPage({ onStart }) {
   const [hoveredCard, setHoveredCard] = useState(null);
   const [scrollY, setScrollY] = useState(0);
@@ -84,21 +84,8 @@ function LandingPage({ onStart }) {
       <style jsx global>{`
         @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800;900&display=swap');
         * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Poppins', sans-serif; }
-        body { overflow-x: hidden; padding: 0; margin: 0; }
+        body { overflow-x: hidden; }
         html { scroll-behavior: smooth; }
-        
-        /* MOBILE RESPONSIVE */
-        @media (max-width: 768px) {
-          body { font-size: 14px; }
-          .wrapper { grid-template-columns: 1fr !important; gap: 10px !important; }
-          .sidebar { display: none !important; }
-          .container { height: auto !important; }
-          input, textarea, button { font-size: 16px; }
-        }
-        
-        @media (max-width: 480px) {
-          * { font-size: calc(var(--font-size, 1) * 0.9); }
-        }
       `}</style>
 
       {/* NAVBAR ULTRA-CLEAN */}
@@ -131,7 +118,21 @@ function LandingPage({ onStart }) {
           </p>
 
           {/* CTA BUTTON */}
-          <button onClick={onStart} style={{ padding: '16px 48px', background: 'linear-gradient(135deg, #1e3c72 0%, #2a5298 100%)', color: 'white', border: 'none', borderRadius: '12px', fontSize: '18px', fontWeight: '700', cursor: 'pointer', marginBottom: '60px', boxShadow: '0 10px 40px rgba(30,60,114,0.3)', transition: 'all 0.3s', transform: 'scale(1)' }} onMouseOver={(e) => { e.target.style.transform = 'scale(1.05)'; }} onMouseOut={(e) => { e.target.style.transform = 'scale(1)'; }}>
+          <button onClick={onStart} style={{ 
+            padding: 'clamp(12px, 3vw, 16px) clamp(32px, 8vw, 48px)', 
+            background: 'linear-gradient(135deg, #1e3c72 0%, #2a5298 100%)', 
+            color: 'white', 
+            border: 'none', 
+            borderRadius: '12px', 
+            fontSize: 'clamp(14px, 3.5vw, 16px)', 
+            fontWeight: '700', 
+            cursor: 'pointer', 
+            marginBottom: 'clamp(40px, 8vw, 60px)',
+            boxShadow: '0 10px 40px rgba(30,60,114,0.3)', 
+            transition: 'all 0.3s'
+          }} 
+          onMouseOver={(e) => { e.target.style.transform = 'scale(1.05)'; }} 
+          onMouseOut={(e) => { e.target.style.transform = 'scale(1)'; }}>
             🚀 Commencer le Diagnostic
           </button>
 
@@ -269,7 +270,7 @@ export default function Home() {
   const [user, setUser] = useState(null);
   const [loading, setLoading] = useState(true);
   const [showAuth, setShowAuth] = useState(true);
-  const [showApp, setShowApp] = useState(false); // ✨ NOUVEAU: Contrôle affichage landing vs app
+  const [showApp, setShowApp] = useState(false); // ✨ NOUVEAU: Landing page en premier
   const [isSignUp, setIsSignUp] = useState(false);
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
@@ -356,6 +357,7 @@ export default function Home() {
     const unsubscribe = onAuthStateChanged(auth, (currentUser) => {
       setUser(currentUser);
       if (currentUser) {
+        setShowApp(false); // ✨ Afficher landing page en premier
         setShowAuth(false);
         loadConversations(currentUser.uid);
         loadHistoryFromConversations(currentUser.uid);
@@ -486,6 +488,7 @@ export default function Home() {
 
   const handleLogout = async () => {
     await signOut(auth);
+    setShowApp(false); // ✨ Retour à la landing page
     setShowAuth(true);
     setMessages([{ role: 'assistant', content: 'Bonjour 👋' }]);
     setConversations([]);
@@ -1107,7 +1110,7 @@ export default function Home() {
   if (user && !showApp) {
     return (
       <>
-        <Head><title>Assistant Immobilier - Diagnostic IA</title><meta name="viewport" content="width=device-width, initial-scale=1" /></Head>
+        <Head><title>Assistant Immobilier</title><meta name="viewport" content="width=device-width, initial-scale=1" /></Head>
         <LandingPage onStart={() => setShowApp(true)} />
       </>
     );
