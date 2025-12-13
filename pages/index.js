@@ -33,7 +33,7 @@ const detectTag = (text) => {
 };
 
 // ===== LANDING PAGE PREMIUM V2 =====
-function LandingPage() {
+function LandingPage({ onStart }) {
   const [hoveredCard, setHoveredCard] = useState(null);
   const [scrollY, setScrollY] = useState(0);
   const [stat1, setStat1] = useState(0);
@@ -129,6 +129,11 @@ function LandingPage() {
           <p style={{ fontSize: '20px', color: '#4a5568', marginBottom: '50px', lineHeight: '1.8', maxWidth: '750px', margin: '0 auto 50px', fontWeight: '500' }}>
             Diagnostic immobilier instantané avec Claude. Analysez les photos, identifiez les problèmes et recevez des solutions en temps réel.
           </p>
+
+          {/* CTA BUTTON */}
+          <button onClick={onStart} style={{ padding: '16px 48px', background: 'linear-gradient(135deg, #1e3c72 0%, #2a5298 100%)', color: 'white', border: 'none', borderRadius: '12px', fontSize: '18px', fontWeight: '700', cursor: 'pointer', marginBottom: '60px', boxShadow: '0 10px 40px rgba(30,60,114,0.3)', transition: 'all 0.3s', transform: 'scale(1)' }} onMouseOver={(e) => { e.target.style.transform = 'scale(1.05)'; }} onMouseOut={(e) => { e.target.style.transform = 'scale(1)'; }}>
+            🚀 Commencer le Diagnostic
+          </button>
 
           {/* STATS SECTION */}
           <div style={{ display: 'grid', gridTemplateColumns: 'repeat(3, 1fr)', gap: '40px', marginTop: '80px', maxWidth: '850px', margin: '80px auto 0' }}>
@@ -264,6 +269,7 @@ export default function Home() {
   const [user, setUser] = useState(null);
   const [loading, setLoading] = useState(true);
   const [showAuth, setShowAuth] = useState(true);
+  const [showApp, setShowApp] = useState(false); // ✨ NOUVEAU: Contrôle affichage landing vs app
   const [isSignUp, setIsSignUp] = useState(false);
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
@@ -1071,7 +1077,7 @@ export default function Home() {
     return (
       <>
         <Head><title>Assistant Immobilier - Diagnostic IA</title></Head>
-        <LandingPage />
+        <LandingPage onStart={() => setShowAuth(true)} />
         
         {/* AUTH MODAL */}
         {showAuth && (
@@ -1097,7 +1103,17 @@ export default function Home() {
     );
   }
 
-  // SI CONNECTÉ = TON APP
+  // ✨ SI CONNECTÉ MAIS PAS COMMENCÉ = LANDING PAGE
+  if (user && !showApp) {
+    return (
+      <>
+        <Head><title>Assistant Immobilier - Diagnostic IA</title><meta name="viewport" content="width=device-width, initial-scale=1" /></Head>
+        <LandingPage onStart={() => setShowApp(true)} />
+      </>
+    );
+  }
+
+  // SI CONNECTÉ ET COMMENCÉ = TON APP
   return (
     <>
       <Head><title>Assistant Immobilier</title><meta name="viewport" content="width=device-width, initial-scale=1" /></Head>
