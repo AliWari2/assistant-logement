@@ -1098,11 +1098,17 @@ export default function Home() {
     setDemoLoading(true);
     setToast('📚 Chargement démo...');
     setTimeout(() => {
+      // Crée un utilisateur fictif pour la démo
+      setUser({ 
+        uid: 'demo-user-' + Date.now(), 
+        email: 'demo@assistant-immobilier.com',
+        isDemo: true 
+      });
       setConversations(DEMO_CONVERSATIONS);
       setIsDemoMode(true);
       setCurrentConvId(DEMO_CONVERSATIONS[0].id);
       setMessages(DEMO_CONVERSATIONS[0].messages);
-      setAuthPage(false);  // ← FERME LE MODAL ET AFFICHE L'APP!
+      setAuthPage(false);
       setDemoLoading(false);
       setToast('✅ Démo chargée! Explore les conversations.');
       setTimeout(() => setToast(null), 3000);
@@ -1909,12 +1915,6 @@ export default function Home() {
                 </RippleButton>
               </div>
               <div style={{ textAlign: 'center', marginBottom: '20px', color: '#999', fontSize: 'clamp(12px, 2vw, 14px)' }}>ou</div>
-              <RippleButton 
-                onClick={loadDemoConversations} 
-                disabled={demoLoading} 
-                style={{ width: '100%', padding: '12px', background: 'linear-gradient(135deg, #10b981 0%, #059669 100%)', color: 'white', border: 'none', borderRadius: '10px', fontWeight: '600', cursor: 'pointer', fontSize: 'clamp(12px, 2vw, 14px)', position: 'relative', overflow: 'hidden', marginBottom: '12px' }}>
-                {demoLoading ? '⏳ Chargement...' : '👀 Voir la Démo (5 conversations)'}
-              </RippleButton>
               <RippleButton 
                 onClick={handleGuestLogin} 
                 disabled={authLoading} 
