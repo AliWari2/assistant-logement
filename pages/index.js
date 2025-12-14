@@ -1279,6 +1279,8 @@ export default function Home() {
       return null;
     }
   };
+
+  const messagesEndRef = useRef(null);
   const autoSaveTimer = useRef(null);
   const sessionTimer = useRef(null);
   const recognitionRef = useRef(null);
