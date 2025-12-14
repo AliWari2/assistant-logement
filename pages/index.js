@@ -1197,8 +1197,88 @@ export default function Home() {
   const [showStatsDashboard, setShowStatsDashboard] = useState(false);
   const [isDemoMode, setIsDemoMode] = useState(false);
   const [demoLoading, setDemoLoading] = useState(false);
+  const [insightsData, setInsightsData] = useState(null);
+  const [showInsightsCard, setShowInsightsCard] = useState(false);
 
-  const messagesEndRef = useRef(null);
+  // Fonction pour analyser la réponse et extraire les données d'insights
+  const analyzeForInsights = (content) => {
+    try {
+      // Extraction de la sévérité
+      const severityPatterns = {
+        critical: /(critique|urgence|immédiatement|danger|catastrophique|grave)/i,
+        high: /(élevé|important|rapide|urgent|sérieux|majeur)/i,
+        medium: /(moyen|modéré|normal|standard|habituel)/i,
+        low: /(faible|mineur|léger|petit|minimal)/i
+      };
+
+      let severity = 'medium';
+      let severityValue = 50;
+
+      if (severityPatterns.critical.test(content)) {
+        severity = 'critical';
+        severityValue = 95;
+      } else if (severityPatterns.high.test(content)) {
+        severity = 'high';
+        severityValue = 75;
+      } else if (severityPatterns.low.test(content)) {
+        severity = 'low';
+        severityValue = 25;
+      }
+
+      // Extraction des coûts
+      const costPatterns = /€(\d+(?:\s*-\s*\d+)?)|(\d+(?:\s*-\s*\d+)?)\s*€/gi;
+      let minCost = null, maxCost = null;
+      let costMatch;
+      const costs = [];
+
+      while ((costMatch = costPatterns.exec(content)) !== null) {
+        const match = costMatch[0].replace('€', '').trim();
+        const parts = match.split('-').map(p => parseInt(p.trim()));
+        if (parts[0]) costs.push(parts[0]);
+        if (parts[1]) costs.push(parts[1]);
+      }
+
+      if (costs.length > 0) {
+        minCost = Math.min(...costs);
+        maxCost = Math.max(...costs);
+      }
+
+      // Extraction des recommandations
+      const recommendations = [];
+      const recPatterns = [
+        /contacter.*?(plombier|artisan|professionnel|électricien)/i,
+        /vérifier.*?(tuyau|joint|connexion|prise)/i,
+        /appeler.*?(urgent|rapidement|dès que possible)/i,
+        /solution.*?diy|bricolage/i,
+        /faire.*?soi-même|d\'abord/i
+      ];
+
+      if (recPatterns[0].test(content)) recommendations.push('Contacter un professionnel');
+      if (recPatterns[1].test(content)) recommendations.push('Vérifier les connexions');
+      if (recPatterns[2].test(content)) recommendations.push('Agir rapidement');
+      if (recPatterns[3].test(content) || recPatterns[4].test(content)) recommendations.push('Essayer une solution DIY');
+
+      if (recommendations.length === 0) {
+        if (severity === 'critical') recommendations.push('Contacter un professionnel immédiatement');
+        else if (severity === 'high') recommendations.push('Contacter un professionnel rapidement');
+        else recommendations.push('Évaluer la situation et agir si nécessaire');
+      }
+
+      const urgency = severity === 'critical' ? '⚡ CRITICAL' : severity === 'high' ? '⚠️ HIGH' : '📅 MODERATE';
+
+      return {
+        severity,
+        severityValue,
+        minCost: minCost || 300,
+        maxCost: maxCost || 1500,
+        urgency,
+        recommendations,
+        timestamp: new Date()
+      };
+    } catch (e) {
+      return null;
+    }
+  };
   const autoSaveTimer = useRef(null);
   const sessionTimer = useRef(null);
   const recognitionRef = useRef(null);
@@ -2023,6 +2103,14 @@ export default function Home() {
       }
       const finalMessages = [...newMessages, { role: 'assistant', content: assistantMessage }];
       setMessages(finalMessages);
+      
+      // Analyser la réponse pour les insights
+      const insights = analyzeForInsights(assistantMessage);
+      if (insights) {
+        setInsightsData(insights);
+        setShowInsightsCard(true);
+      }
+      
       generateSuggestions(userInput);
       generateProblemScoring(userInput);
       if (convId) {
@@ -2578,6 +2666,151 @@ export default function Home() {
 
                     <div style={{ marginTop: '12px', padding: '8px 12px', background: problemScoring.urgency > 75 ? '#fee' : problemScoring.urgency > 50 ? '#fef3c7' : '#dbeafe', borderRadius: '6px', fontSize: '12px', fontWeight: '600', color: problemScoring.urgency > 75 ? '#c00' : problemScoring.urgency > 50 ? '#b45309' : '#1e40af' }}>
                       📊 Priorité: <strong>{problemScoring.priority}</strong>
+                    </div>
+                  </div>
+                )}
+
+                {showInsightsCard && insightsData && (
+                  <div style={{
+                    animation: 'fadeInUp 0.6s ease-out',
+                    background: darkMode ? 'linear-gradient(135deg, #1e293b 0%, #0f172a 100%)' : 'linear-gradient(135deg, #ffffff 0%, #f9fafb 100%)',
+                    border: `2px solid ${insightsData.severity === 'critical' ? '#ef4444' : insightsData.severity === 'high' ? '#f97316' : insightsData.severity === 'medium' ? '#eab308' : '#22c55e'}`,
+                    borderRadius: '16px',
+                    padding: '24px',
+                    marginTop: '16px',
+                    boxShadow: '0 10px 30px rgba(0,0,0,0.15)',
+                    transition: 'all 0.3s'
+                  }}
+                  onMouseEnter={(e) => {
+                    e.currentTarget.style.transform = 'translateY(-4px)';
+                    e.currentTarget.style.boxShadow = '0 15px 40px rgba(0,0,0,0.2)';
+                  }}
+                  onMouseLeave={(e) => {
+                    e.currentTarget.style.transform = 'translateY(0)';
+                    e.currentTarget.style.boxShadow = '0 10px 30px rgba(0,0,0,0.15)';
+                  }}>
+                    <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: '16px' }}>
+                      <h3 style={{ fontSize: '16px', fontWeight: '700', color: insightsData.severity === 'critical' ? '#ef4444' : insightsData.severity === 'high' ? '#f97316' : insightsData.severity === 'medium' ? '#eab308' : '#22c55e', margin: 0 }}>
+                        📋 DIAGNOSTIC INSIGHTS
+                      </h3>
+                      <button onClick={() => setShowInsightsCard(false)} style={{ background: 'none', border: 'none', fontSize: '20px', cursor: 'pointer', opacity: 0.6 }}>×</button>
+                    </div>
+
+                    <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '16px', marginBottom: '16px' }}>
+                      <div>
+                        <div style={{ fontSize: '11px', fontWeight: '600', color: '#999', marginBottom: '8px', textTransform: 'uppercase', letterSpacing: '0.5px' }}>
+                          Severity Level
+                        </div>
+                        <div style={{ marginBottom: '8px' }}>
+                          <div style={{
+                            fontSize: insightsData.severity === 'critical' ? '18px' : '16px',
+                            fontWeight: '700',
+                            color: insightsData.severity === 'critical' ? '#ef4444' : insightsData.severity === 'high' ? '#f97316' : insightsData.severity === 'medium' ? '#eab308' : '#22c55e',
+                            marginBottom: '8px'
+                          }}>
+                            {insightsData.severity === 'critical' ? '🔴 CRITICAL' : insightsData.severity === 'high' ? '🟠 HIGH' : insightsData.severity === 'medium' ? '🟡 MEDIUM' : '🟢 LOW'}
+                          </div>
+                          <div style={{
+                            width: '100%',
+                            height: '8px',
+                            background: darkMode ? '#374151' : '#e5e7eb',
+                            borderRadius: '4px',
+                            overflow: 'hidden'
+                          }}>
+                            <div style={{
+                              width: `${insightsData.severityValue}%`,
+                              height: '100%',
+                              background: insightsData.severity === 'critical' ? 'linear-gradient(90deg, #ef4444, #dc2626)' : insightsData.severity === 'high' ? 'linear-gradient(90deg, #f97316, #ea580c)' : insightsData.severity === 'medium' ? 'linear-gradient(90deg, #eab308, #ca8a04)' : 'linear-gradient(90deg, #22c55e, #16a34a)',
+                              borderRadius: '4px',
+                              transition: 'width 0.6s ease-out'
+                            }} />
+                          </div>
+                          <div style={{ fontSize: '12px', color: '#999', marginTop: '4px' }}>{insightsData.severityValue}%</div>
+                        </div>
+                      </div>
+
+                      <div>
+                        <div style={{ fontSize: '11px', fontWeight: '600', color: '#999', marginBottom: '8px', textTransform: 'uppercase', letterSpacing: '0.5px' }}>
+                          Estimated Cost
+                        </div>
+                        <div style={{ fontSize: '20px', fontWeight: '700', color: '#2a5298', marginBottom: '4px' }}>
+                          💰 €{insightsData.minCost} - €{insightsData.maxCost}
+                        </div>
+                        <div style={{ fontSize: '12px', color: '#999' }}>
+                          {insightsData.minCost < 500 ? 'Budget friendly' : insightsData.maxCost < 2000 ? 'Moderate cost' : 'High investment'}
+                        </div>
+                      </div>
+                    </div>
+
+                    <div style={{
+                      background: darkMode ? '#1e293b' : '#f0f4f8',
+                      padding: '12px',
+                      borderRadius: '8px',
+                      marginBottom: '16px',
+                      borderLeft: `4px solid ${insightsData.severity === 'critical' ? '#ef4444' : insightsData.severity === 'high' ? '#f97316' : '#eab308'}`
+                    }}>
+                      <div style={{ fontSize: '12px', fontWeight: '600', color: '#999', marginBottom: '4px' }}>URGENCY</div>
+                      <div style={{ fontSize: '14px', fontWeight: '700', color: insightsData.severity === 'critical' ? '#ef4444' : insightsData.severity === 'high' ? '#f97316' : '#eab308' }}>
+                        {insightsData.urgency}
+                      </div>
+                    </div>
+
+                    <div style={{ borderTop: `1px solid ${darkMode ? '#374151' : '#e5e7eb'}`, paddingTop: '16px' }}>
+                      <div style={{ fontSize: '12px', fontWeight: '600', color: '#999', marginBottom: '8px', textTransform: 'uppercase' }}>
+                        Recommended Actions
+                      </div>
+                      <div style={{ display: 'flex', flexDirection: 'column', gap: '6px' }}>
+                        {insightsData.recommendations.map((rec, i) => (
+                          <div key={i} style={{
+                            padding: '8px 12px',
+                            background: darkMode ? '#1e293b' : '#f0f4f8',
+                            borderRadius: '6px',
+                            fontSize: '13px',
+                            fontWeight: '500',
+                            color: textColor,
+                            borderLeft: `3px solid #3b82f6`
+                          }}>
+                            ✓ {rec}
+                          </div>
+                        ))}
+                      </div>
+                    </div>
+
+                    <div style={{ display: 'flex', gap: '8px', marginTop: '16px' }}>
+                      <RippleButton
+                        onClick={() => exportConversation('pdf')}
+                        style={{
+                          flex: 1,
+                          padding: '10px',
+                          background: 'linear-gradient(135deg, #3b82f6 0%, #1e40af 100%)',
+                          color: 'white',
+                          border: 'none',
+                          borderRadius: '8px',
+                          fontWeight: '600',
+                          fontSize: '12px',
+                          cursor: 'pointer',
+                          transition: 'all 0.2s'
+                        }}
+                      >
+                        📥 Export Report
+                      </RippleButton>
+                      <RippleButton
+                        onClick={() => setShowInsightsCard(false)}
+                        style={{
+                          flex: 1,
+                          padding: '10px',
+                          background: darkMode ? '#374151' : '#e5e7eb',
+                          color: textColor,
+                          border: 'none',
+                          borderRadius: '8px',
+                          fontWeight: '600',
+                          fontSize: '12px',
+                          cursor: 'pointer',
+                          transition: 'all 0.2s'
+                        }}
+                      >
+                        📌 Dismiss
+                      </RippleButton>
                     </div>
                   </div>
                 )}
