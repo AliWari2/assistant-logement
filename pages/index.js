@@ -4,6 +4,72 @@ import { auth, db } from '../lib/firebase';
 import { createUserWithEmailAndPassword, signInWithEmailAndPassword, signInAnonymously, signOut, onAuthStateChanged } from 'firebase/auth';
 import { collection, query, where, getDocs, addDoc, updateDoc, deleteDoc, doc, serverTimestamp } from 'firebase/firestore';
 
+// Démo conversations pré-chargées
+const DEMO_CONVERSATIONS = [
+  {
+    id: 'demo-1',
+    title: '💧 Fuite d\'eau - Évier cuisine',
+    tag: 'Plomberie',
+    isFavorite: true,
+    isPinned: true,
+    createdAt: new Date(Date.now() - 2 * 24 * 60 * 60 * 1000),
+    messages: [
+      { role: 'user', content: 'Bonjour, j\'ai une fuite d\'eau sous mon évier de cuisine. L\'eau goutte doucement depuis ce matin. Que faire?' },
+      { role: 'assistant', content: '**Urgence: HAUTE** ⚠️\n\n## Actions immédiales:\n1. **Fermer le robinet d\'eau** sous le meuble (look pour petite valve en bas)\n2. **Placer un seau** pour capturer l\'eau\n3. **Vérifier les tuyauteries** - chercher d\'où vient exactement la fuite\n\n## Causes probables:\n- **Joint usé** (40% des cas) → 50-150€ à remplacer\n- **Tuyau fissuré** → 200-400€\n- **Robinet défectueux** → 150-600€\n\n## Solutions:\n✅ **DIY possible:** Si c\'est juste un joint, tu peux le faire toi-même\n✅ **Plombier recommandé:** Pour diagnostic et remplacement\n\n**Coût estimé:** 100-400€\n**Temps:** 1-2 jours max' },
+      { role: 'user', content: 'C\'est urgent? Je peux attendre le week-end pour appeler un plombier?' },
+      { role: 'assistant', content: '**Oui, tu peux attendre** mais avec conditions:\n\n⚠️ **Risques si tu attends:**\n- Dégâts d\'eau au plancher\n- Moisissure (48-72h)\n- Augmentation facture eau\n\n**Meilleure stratégie:**\n1. Fermer l\'eau maintenant (URGENT!)\n2. Placer seau/bac\n3. Appeler plombier lundi matin\n4. En weekend = si eau qui s\'accumule dangereusement\n\n**Plombier d\'urgence coûte +50-100€ mais évite dégâts.**\n\nRecommandation: **Ferme l\'eau dès maintenant** et appelle lundi! 🔧' }
+    ]
+  },
+  {
+    id: 'demo-2',
+    title: '🌡️ Chauffage - Radiateur froid',
+    tag: 'Chauffage',
+    isFavorite: false,
+    isPinned: false,
+    createdAt: new Date(Date.now() - 5 * 24 * 60 * 60 * 1000),
+    messages: [
+      { role: 'user', content: 'Mon radiateur de chambre est complètement froid. Les autres radiateurs fonctionnent. Comment diagnostiquer?' },
+      { role: 'assistant', content: '## Diagnostic rapide (5 min):\n\n**Étape 1: Purger le radiateur**\n1. Cherche la vis de purge (petit bouchon en haut)\n2. Ouvre avec clé hexagonale\n3. Entends-tu un sifflement?\n\n✅ **Oui** = Air dans le système → Purge 20 sec et ferme\n❌ **Non** = Problème de circulation\n\n**Étape 2: Vérifier la température**\n- Entrée (bas gauche) = doit être chaude\n- Sortie (bas droite) = doit être moins chaude\n- **Les 2 froides?** = Valve thermostatique bloquée\n\n**Solutions possibles:**\n1. **Purge réussie** (70%) = Résolu! Gratuit\n2. **Thermostat bloqué** = 50-150€ à remplacer\n3. **Problème tuyauterie** = Pro nécessaire' }
+    ]
+  },
+  {
+    id: 'demo-3',
+    title: '⚡ Électricité - Prise ne marche pas',
+    tag: 'Électricité',
+    isFavorite: false,
+    isPinned: false,
+    createdAt: new Date(Date.now() - 7 * 24 * 60 * 60 * 1000),
+    messages: [
+      { role: 'user', content: 'Une prise dans mon salon ne donne plus le courant. Les autres prises de la pièce marchent. C\'est grave?' },
+      { role: 'assistant', content: '**Pas grave généralement!** 60% des cas = solution simple.\n\n## Vérification (30 secondes):\n\n**Test 1: Disjoncteur**\n- Va à ton tableau électrique\n- Cherche le disjoncteur de la pièce\n- Est-il basculé en position OFF?\n\nSi oui → Bascule en ON → Prise réparée! ✅\n\n**Test 2: Prises différentielles (DDR)**\nSi le disjoncteur est ON:\n- Cherche le bouton RESET rouge/noir sur le DDR\n- Appuie dessus\n- Prise redémarre? → Surcharge électrique\n\n**Solutions:**\n✅ **Prise branchée ailleurs** = Gratuit\n✅ **DDR reset** = Gratuit\n❌ **Disjoncteur répété OFF** = Appelle électricien (200-400€)\n❌ **Prise carbonisée** = Remplacement (100-150€)\n\n**Risque incendie?** Oui si c\'est carbonisé = appelle pro ASAP' }
+    ]
+  },
+  {
+    id: 'demo-4',
+    title: '🪟 Isolation - Courants d\'air fenêtre',
+    tag: 'Isolation',
+    isFavorite: false,
+    isPinned: false,
+    createdAt: new Date(Date.now() - 10 * 24 * 60 * 60 * 1000),
+    messages: [
+      { role: 'user', content: 'Je sens des courants d\'air autour de mes fenêtres en hiver. Comment tester et réparer?' },
+      { role: 'assistant', content: '## Diagnostic courant d\'air:\n\n**Test 1: Bougie/Fumée**\n- Allume une bougie près de l\'encadrement\n- La flamme bouge? → Fuite d\'air confirmée\n- Où? → Marque les spots\n\n**Causes et solutions:**\n\n1. **Joint usé** (80% des cas)\n   - Coût: 50-200€ (DIY possible)\n   - Solution: Remplacer joint en mousse\n\n2. **Fenêtre mal ajustée**\n   - Coût: 50-150€\n   - Solution: Réajustement serrures\n\n3. **Vitrage dégradé**\n   - Coût: 500-2000€\n   - Solution: Changer le vitrage\n\n**Gains énergétiques:**\n- Réduire courant d\'air = -15% facture chauffage\n- Amortissement en 2-3 ans\n\n**Action rapide:** Bande adhésive tempor pour hiver (5€)' }
+    ]
+  },
+  {
+    id: 'demo-5',
+    title: '🏠 Généraliste - Inspection préachat',
+    tag: 'Généraliste',
+    isFavorite: true,
+    isPinned: false,
+    createdAt: new Date(Date.now() - 15 * 24 * 60 * 60 * 1000),
+    messages: [
+      { role: 'user', content: 'Je dois acheter un appart. Quels sont les défauts majeurs que je dois vérifier avant de signer?' },
+      { role: 'assistant', content: '## CHECK-LIST ACHAT IMMOBILIER 🏡\n\n**PRIORITÉ 1 - Structurel (Critique):**\n- ✅ Fissures murs (> 2mm = pro requis)\n- ✅ Humidité/Moisissure (coûteux à réparer)\n- ✅ Toit (inspections >= 15 ans)\n- ✅ Fondations (fissures = danger)\n\nCoût réparation: **5,000-50,000€**\n\n**PRIORITÉ 2 - Systèmes (Important):**\n- ✅ Électricité (normes 2010+?)\n- ✅ Plomberie (eau chaude OK?)\n- ✅ Chauffage (quelle énergie?)\n- ✅ Fenêtres (simple/double vitrage)\n\nCoût: **2,000-10,000€**\n\n**PRIORITÉ 3 - Confort (Souhaitable):**\n- ✅ Isolation (facture chauffage?)\n- ✅ Cuisine/Salle bain (âge?)\n- ✅ Peinture/Revêtements\n- ✅ Parking/Accès\n\n**PRO TIP:** Faire expertise avant offre = Essentiel! (300-500€)\n\n**Score d\'achat:** Risk élevé si + de 2 priorité 1 = Négocier 20%!' }
+    ]
+  }
+];
+
 const TEMPLATES = [
   { icon: '💧', label: 'Plomberie', text: 'J\'ai un problème de plomberie' },
   { icon: '🌡️', label: 'Chauffage', text: 'Mon chauffage ne marche pas' },
@@ -918,6 +984,8 @@ export default function Home() {
   const [showOnboarding, setShowOnboarding] = useState(false);
   const [showExportChooser, setShowExportChooser] = useState(false);
   const [showStatsDashboard, setShowStatsDashboard] = useState(false);
+  const [isDemoMode, setIsDemoMode] = useState(false);
+  const [demoLoading, setDemoLoading] = useState(false);
 
   const messagesEndRef = useRef(null);
   const autoSaveTimer = useRef(null);
@@ -1021,7 +1089,23 @@ export default function Home() {
       setConversations(sorted);
     } catch (error) {
       console.error('Error loading conversations:', error);
+      setToast('⚠️ Erreur: Impossible de charger les conversations. Vérifiez votre connexion.');
+      setTimeout(() => setToast(null), 3000);
     }
+  };
+
+  const loadDemoConversations = () => {
+    setDemoLoading(true);
+    setToast('📚 Chargement démo...');
+    setTimeout(() => {
+      setConversations(DEMO_CONVERSATIONS);
+      setIsDemoMode(true);
+      setCurrentConvId(DEMO_CONVERSATIONS[0].id);
+      setMessages(DEMO_CONVERSATIONS[0].messages);
+      setDemoLoading(false);
+      setToast('✅ Démo chargée! Explore les conversations.');
+      setTimeout(() => setToast(null), 3000);
+    }, 800);
   };
 
   const loadHistoryFromConversations = async (userId) => {
@@ -1825,9 +1909,15 @@ export default function Home() {
               </div>
               <div style={{ textAlign: 'center', marginBottom: '20px', color: '#999', fontSize: 'clamp(12px, 2vw, 14px)' }}>ou</div>
               <RippleButton 
+                onClick={loadDemoConversations} 
+                disabled={demoLoading} 
+                style={{ width: '100%', padding: '12px', background: 'linear-gradient(135deg, #10b981 0%, #059669 100%)', color: 'white', border: 'none', borderRadius: '10px', fontWeight: '600', cursor: 'pointer', fontSize: 'clamp(12px, 2vw, 14px)', position: 'relative', overflow: 'hidden', marginBottom: '12px' }}>
+                {demoLoading ? '⏳ Chargement...' : '👀 Voir la Démo (5 conversations)'}
+              </RippleButton>
+              <RippleButton 
                 onClick={handleGuestLogin} 
                 disabled={authLoading} 
-                style={{ width: '100%', padding: '12px', background: secondaryBg, color: '#2a5298', border: '2px solid #2a5298', borderRadius: '10px', fontWeight: '600', cursor: 'pointer', fontSize: 'clamp(12px, 2vw, 14px)' }}>
+                style={{ width: '100%', padding: '12px', background: secondaryBg, color: '#2a5298', border: '2px solid #2a5298', borderRadius: '10px', fontWeight: '600', cursor: 'pointer', fontSize: 'clamp(12px, 2vw, 14px)', position: 'relative', overflow: 'hidden' }}>
                 👤 Continuer en tant qu'invité
               </RippleButton>
             </div>
