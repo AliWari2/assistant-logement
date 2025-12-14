@@ -1048,8 +1048,7 @@ export default function Home() {
         setAuthPage(false);
         loadConversations(currentUser.uid);
         loadHistoryFromConversations(currentUser.uid);
-        setSessionTimeLeft(300);
-        
+        setSessionTimeLeft(7200);        
         // Show onboarding si c'est la première visite
         const hasVisited = localStorage.getItem('hasVisited');
         if (!hasVisited) {
@@ -1066,7 +1065,7 @@ export default function Home() {
     if (!user) return;
     sessionTimer.current = setInterval(() => {
       setSessionTimeLeft(t => {
-        if (t <= 1) { handleLogout(); return 300; }
+        if (t <= 1) { handleLogout(); return 7200; }
         return t - 1;
       });
     }, 1000);
