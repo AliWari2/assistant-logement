@@ -1947,47 +1947,102 @@ export default function Home() {
   if (loading) return <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', height: '100vh', background: bgGradient }}><div style={{ color: 'white' }}>Chargement...</div></div>;
 
   if (!user) {
+    const isMobile = typeof window !== 'undefined' && window.innerWidth < 768;
+    
     return (
       <>
         <Head><title>Assistant Immobilier - Diagnostic IA</title><meta name="viewport" content="width=device-width, initial-scale=1.0" /></Head>
-        <LandingPage onStart={() => setAuthPage(true)} />
         
-        {authPage && (
-          <div style={{ position: 'fixed', top: 0, left: 0, right: 0, bottom: 0, background: 'rgba(0,0,0,0.5)', display: 'flex', alignItems: 'center', justifyContent: 'center', zIndex: 1000, padding: 'clamp(20px, 5vw, 20px)' }}>
-            <div style={{ background: containerBg, borderRadius: '20px', padding: 'clamp(24px, 5vw, 40px)', maxWidth: '400px', width: '100%', boxShadow: '0 25px 80px rgba(0,0,0,0.35)' }}>
-              <h1 style={{ fontSize: 'clamp(20px, 5vw, 28px)', textAlign: 'center', color: textColor, marginBottom: '24px' }}>🏢 Se Connecter</h1>
+        {/* MOBILE: Version simplifiée */}
+        {isMobile ? (
+          <div style={{ minHeight: '100vh', background: bgGradient, display: 'flex', flexDirection: 'column', justifyContent: 'center', alignItems: 'center', padding: '20px' }}>
+            <div style={{ textAlign: 'center', marginBottom: '40px', color: 'white' }}>
+              <h1 style={{ fontSize: '32px', fontWeight: '900', marginBottom: '12px' }}>🏢 Assistant Immobilier</h1>
+              <p style={{ fontSize: '16px', opacity: 0.9 }}>Diagnostic immobilier avec IA</p>
+            </div>
+
+            <div style={{ background: containerBg, borderRadius: '20px', padding: '30px', maxWidth: '100%', width: '100%', boxShadow: '0 25px 80px rgba(0,0,0,0.35)' }}>
+              <h2 style={{ fontSize: '20px', textAlign: 'center', color: textColor, marginBottom: '24px', fontWeight: '600' }}>Se Connecter</h2>
+              
               <div style={{ display: 'flex', gap: '10px', marginBottom: '20px' }}>
                 <RippleButton 
                   onClick={() => setIsSignUp(false)} 
-                  style={{ flex: 1, padding: '12px', background: !isSignUp ? bgGradient : secondaryBg, color: !isSignUp ? 'white' : textColor, border: 'none', borderRadius: '10px', fontWeight: '600', cursor: 'pointer', fontSize: 'clamp(12px, 2vw, 14px)' }}>
+                  style={{ flex: 1, padding: '12px', background: !isSignUp ? bgGradient : secondaryBg, color: !isSignUp ? 'white' : textColor, border: 'none', borderRadius: '10px', fontWeight: '600', cursor: 'pointer', fontSize: '13px' }}>
                   Connexion
                 </RippleButton>
                 <RippleButton 
                   onClick={() => setIsSignUp(true)} 
-                  style={{ flex: 1, padding: '12px', background: isSignUp ? bgGradient : secondaryBg, color: isSignUp ? 'white' : textColor, border: 'none', borderRadius: '10px', fontWeight: '600', cursor: 'pointer', fontSize: 'clamp(12px, 2vw, 14px)' }}>
+                  style={{ flex: 1, padding: '12px', background: isSignUp ? bgGradient : secondaryBg, color: isSignUp ? 'white' : textColor, border: 'none', borderRadius: '10px', fontWeight: '600', cursor: 'pointer', fontSize: '13px' }}>
                   Inscription
                 </RippleButton>
               </div>
-              {authError && <div style={{ background: '#fee', color: '#c00', padding: '12px', borderRadius: '8px', marginBottom: '20px', fontSize: '14px' }}>{authError}</div>}
+
+              {authError && <div style={{ background: '#fee', color: '#c00', padding: '12px', borderRadius: '8px', marginBottom: '20px', fontSize: '14px', fontWeight: '500' }}>{authError}</div>}
+              
               <div style={{ display: 'flex', flexDirection: 'column', gap: '12px', marginBottom: '20px' }}>
-                <input type="email" placeholder="Email" value={email} onChange={(e) => setEmail(e.target.value)} style={{ padding: '12px', border: `1.5px solid ${borderColor}`, borderRadius: '10px', background: containerBg, color: textColor, fontSize: 'clamp(12px, 2vw, 14px)' }} />
-                <input type="password" placeholder="Mot de passe" value={password} onChange={(e) => setPassword(e.target.value)} style={{ padding: '12px', border: `1.5px solid ${borderColor}`, borderRadius: '10px', background: containerBg, color: textColor, fontSize: 'clamp(12px, 2vw, 14px)' }} />
+                <input type="email" placeholder="Email" value={email} onChange={(e) => setEmail(e.target.value)} style={{ padding: '14px', border: `1.5px solid ${borderColor}`, borderRadius: '10px', background: containerBg, color: textColor, fontSize: '14px', minHeight: '48px' }} />
+                <input type="password" placeholder="Mot de passe" value={password} onChange={(e) => setPassword(e.target.value)} style={{ padding: '14px', border: `1.5px solid ${borderColor}`, borderRadius: '10px', background: containerBg, color: textColor, fontSize: '14px', minHeight: '48px' }} />
                 <RippleButton 
                   onClick={isSignUp ? handleSignUp : handleSignIn} 
                   disabled={authLoading} 
-                  style={{ padding: '12px', background: bgGradient, color: 'white', border: 'none', borderRadius: '10px', fontWeight: '600', cursor: 'pointer', opacity: authLoading ? 0.6 : 1, fontSize: 'clamp(12px, 2vw, 14px)' }}>
-                  {authLoading ? '...' : (isSignUp ? 'S\'inscrire' : 'Se connecter')}
+                  style={{ padding: '14px', background: bgGradient, color: 'white', border: 'none', borderRadius: '10px', fontWeight: '600', cursor: 'pointer', opacity: authLoading ? 0.6 : 1, fontSize: '14px', fontWeight: '600', minHeight: '48px' }}>
+                  {authLoading ? '⏳ Chargement...' : (isSignUp ? 'S\'inscrire' : 'Se connecter')}
                 </RippleButton>
               </div>
-              <div style={{ textAlign: 'center', marginBottom: '20px', color: '#999', fontSize: 'clamp(12px, 2vw, 14px)' }}>ou</div>
+
+              <div style={{ textAlign: 'center', marginBottom: '20px', color: '#999', fontSize: '14px' }}>ou</div>
+              
               <RippleButton 
                 onClick={handleGuestLogin} 
                 disabled={authLoading} 
-                style={{ width: '100%', padding: '12px', background: secondaryBg, color: '#2a5298', border: '2px solid #2a5298', borderRadius: '10px', fontWeight: '600', cursor: 'pointer', fontSize: 'clamp(12px, 2vw, 14px)', position: 'relative', overflow: 'hidden' }}>
+                style={{ width: '100%', padding: '14px', background: secondaryBg, color: '#2a5298', border: '2px solid #2a5298', borderRadius: '10px', fontWeight: '600', cursor: 'pointer', fontSize: '14px', position: 'relative', overflow: 'hidden', minHeight: '48px' }}>
                 👤 Continuer en tant qu'invité
               </RippleButton>
             </div>
           </div>
+        ) : (
+          /* DESKTOP: Version complète */
+          <>
+            <LandingPage onStart={() => setAuthPage(true)} />
+            
+            {authPage && (
+              <div style={{ position: 'fixed', top: 0, left: 0, right: 0, bottom: 0, background: 'rgba(0,0,0,0.5)', display: 'flex', alignItems: 'center', justifyContent: 'center', zIndex: 1000, padding: 'clamp(20px, 5vw, 20px)' }}>
+                <div style={{ background: containerBg, borderRadius: '20px', padding: 'clamp(24px, 5vw, 40px)', maxWidth: '400px', width: '100%', boxShadow: '0 25px 80px rgba(0,0,0,0.35)' }}>
+                  <h1 style={{ fontSize: 'clamp(20px, 5vw, 28px)', textAlign: 'center', color: textColor, marginBottom: '24px' }}>🏢 Se Connecter</h1>
+                  <div style={{ display: 'flex', gap: '10px', marginBottom: '20px' }}>
+                    <RippleButton 
+                      onClick={() => setIsSignUp(false)} 
+                      style={{ flex: 1, padding: '12px', background: !isSignUp ? bgGradient : secondaryBg, color: !isSignUp ? 'white' : textColor, border: 'none', borderRadius: '10px', fontWeight: '600', cursor: 'pointer', fontSize: 'clamp(12px, 2vw, 14px)' }}>
+                      Connexion
+                    </RippleButton>
+                    <RippleButton 
+                      onClick={() => setIsSignUp(true)} 
+                      style={{ flex: 1, padding: '12px', background: isSignUp ? bgGradient : secondaryBg, color: isSignUp ? 'white' : textColor, border: 'none', borderRadius: '10px', fontWeight: '600', cursor: 'pointer', fontSize: 'clamp(12px, 2vw, 14px)' }}>
+                      Inscription
+                    </RippleButton>
+                  </div>
+                  {authError && <div style={{ background: '#fee', color: '#c00', padding: '12px', borderRadius: '8px', marginBottom: '20px', fontSize: '14px' }}>{authError}</div>}
+                  <div style={{ display: 'flex', flexDirection: 'column', gap: '12px', marginBottom: '20px' }}>
+                    <input type="email" placeholder="Email" value={email} onChange={(e) => setEmail(e.target.value)} style={{ padding: '12px', border: `1.5px solid ${borderColor}`, borderRadius: '10px', background: containerBg, color: textColor, fontSize: 'clamp(12px, 2vw, 14px)' }} />
+                    <input type="password" placeholder="Mot de passe" value={password} onChange={(e) => setPassword(e.target.value)} style={{ padding: '12px', border: `1.5px solid ${borderColor}`, borderRadius: '10px', background: containerBg, color: textColor, fontSize: 'clamp(12px, 2vw, 14px)' }} />
+                    <RippleButton 
+                      onClick={isSignUp ? handleSignUp : handleSignIn} 
+                      disabled={authLoading} 
+                      style={{ padding: '12px', background: bgGradient, color: 'white', border: 'none', borderRadius: '10px', fontWeight: '600', cursor: 'pointer', opacity: authLoading ? 0.6 : 1, fontSize: 'clamp(12px, 2vw, 14px)' }}>
+                      {authLoading ? '...' : (isSignUp ? 'S\'inscrire' : 'Se connecter')}
+                    </RippleButton>
+                  </div>
+                  <div style={{ textAlign: 'center', marginBottom: '20px', color: '#999', fontSize: 'clamp(12px, 2vw, 14px)' }}>ou</div>
+                  <RippleButton 
+                    onClick={handleGuestLogin} 
+                    disabled={authLoading} 
+                    style={{ width: '100%', padding: '12px', background: secondaryBg, color: '#2a5298', border: '2px solid #2a5298', borderRadius: '10px', fontWeight: '600', cursor: 'pointer', fontSize: 'clamp(12px, 2vw, 14px)', position: 'relative', overflow: 'hidden' }}>
+                    👤 Continuer en tant qu'invité
+                  </RippleButton>
+                </div>
+              </div>
+            )}
+          </>
         )}
       </>
     );
@@ -2103,11 +2158,27 @@ export default function Home() {
         ::-webkit-scrollbar-thumb { background: ${darkMode ? '#64748b' : '#888'}; border-radius: 3px; }
         ::-webkit-scrollbar-thumb:hover { background: ${darkMode ? '#94a3b8' : '#555'}; }
         @media (max-width: 768px) { 
-          .wrapper { grid-template-columns: 1fr; height: auto; } 
-          .sidebar { display: none; } 
-          .msg-content { max-width: 85% !important; }
-          .toolbar { overflow-x: auto; }
-          .toolbar-btn { font-size: clamp(10px, 1.5vw, 12px); padding: 6px 10px; }
+          .wrapper { grid-template-columns: 1fr; height: auto; min-height: 100vh; } 
+          .sidebar { display: none; }
+          .container { border-radius: 0; }
+          .header { padding: clamp(16px, 4vw, 20px); border-radius: 0; }
+          .header h1 { font-size: clamp(18px, 5vw, 24px); }
+          .header p { font-size: clamp(12px, 2.5vw, 14px); }
+          .messages-container { padding: clamp(16px, 2vw, 20px); gap: 16px; }
+          .msg-content { max-width: 85% !important; padding: 14px 18px; font-size: 14px; }
+          .message.user { margin-left: auto; }
+          .msg-avatar { width: 36px; height: 36px; font-size: 18px; }
+          .toolbar { padding: clamp(12px, 2vw, 16px); gap: 8px; justify-content: flex-start; overflow-x: auto; }
+          .toolbar-btn { font-size: 12px; padding: 8px 12px; flex-shrink: 0; min-height: 40px; }
+          .input-section { padding: clamp(14px, 2vw, 18px); gap: 10px; }
+          .input-section input { padding: 12px 14px; font-size: 14px; min-height: 44px; }
+          .send-btn { padding: 12px 20px; font-size: 14px; min-height: 44px; flex-shrink: 0; }
+          .voice-btn { padding: 12px 14px; font-size: 14px; min-height: 44px; }
+          .templates-grid { grid-template-columns: repeat(2, 1fr); gap: 6px; padding: 8px; }
+          .template-btn { padding: 10px 6px; font-size: 11px; }
+          .conv-item { font-size: 12px; padding: 10px; }
+          .stat-number { font-size: 16px; }
+          .stat-label { font-size: 10px; }
         }
       `}</style>
 
