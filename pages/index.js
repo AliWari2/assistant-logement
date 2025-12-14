@@ -1264,7 +1264,7 @@ export default function Home() {
         else recommendations.push('Évaluer la situation et agir si nécessaire');
       }
 
-      const urgency = severity === 'critical' ? '⚡ CRITICAL' : severity === 'high' ? '⚠️ HIGH' : '📅 MODERATE';
+      const urgency = severity === 'critical' ? '⚡ CRITIQUE' : severity === 'high' ? '⚠️ ÉLEVÉ' : '📅 MODÉRÉ';
 
       return {
         severity,
@@ -2701,7 +2701,7 @@ export default function Home() {
                     <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '16px', marginBottom: '16px' }}>
                       <div>
                         <div style={{ fontSize: '11px', fontWeight: '600', color: '#999', marginBottom: '8px', textTransform: 'uppercase', letterSpacing: '0.5px' }}>
-                          Severity Level
+                          Niveau de Sévérité
                         </div>
                         <div style={{ marginBottom: '8px' }}>
                           <div style={{
@@ -2710,7 +2710,7 @@ export default function Home() {
                             color: insightsData.severity === 'critical' ? '#ef4444' : insightsData.severity === 'high' ? '#f97316' : insightsData.severity === 'medium' ? '#eab308' : '#22c55e',
                             marginBottom: '8px'
                           }}>
-                            {insightsData.severity === 'critical' ? '🔴 CRITICAL' : insightsData.severity === 'high' ? '🟠 HIGH' : insightsData.severity === 'medium' ? '🟡 MEDIUM' : '🟢 LOW'}
+                            {insightsData.severity === 'critical' ? '🔴 CRITIQUE' : insightsData.severity === 'high' ? '🟠 ÉLEVÉ' : insightsData.severity === 'medium' ? '🟡 MOYEN' : '🟢 FAIBLE'}
                           </div>
                           <div style={{
                             width: '100%',
@@ -2733,13 +2733,13 @@ export default function Home() {
 
                       <div>
                         <div style={{ fontSize: '11px', fontWeight: '600', color: '#999', marginBottom: '8px', textTransform: 'uppercase', letterSpacing: '0.5px' }}>
-                          Estimated Cost
+                          Coût Estimé
                         </div>
                         <div style={{ fontSize: '20px', fontWeight: '700', color: '#2a5298', marginBottom: '4px' }}>
                           💰 €{insightsData.minCost} - €{insightsData.maxCost}
                         </div>
                         <div style={{ fontSize: '12px', color: '#999' }}>
-                          {insightsData.minCost < 500 ? 'Budget friendly' : insightsData.maxCost < 2000 ? 'Moderate cost' : 'High investment'}
+                          {insightsData.minCost < 500 ? 'Budget économique' : insightsData.maxCost < 2000 ? 'Coût modéré' : 'Investissement important'}
                         </div>
                       </div>
                     </div>
@@ -2751,7 +2751,7 @@ export default function Home() {
                       marginBottom: '16px',
                       borderLeft: `4px solid ${insightsData.severity === 'critical' ? '#ef4444' : insightsData.severity === 'high' ? '#f97316' : '#eab308'}`
                     }}>
-                      <div style={{ fontSize: '12px', fontWeight: '600', color: '#999', marginBottom: '4px' }}>URGENCY</div>
+                      <div style={{ fontSize: '12px', fontWeight: '600', color: '#999', marginBottom: '4px' }}>URGENCE</div>
                       <div style={{ fontSize: '14px', fontWeight: '700', color: insightsData.severity === 'critical' ? '#ef4444' : insightsData.severity === 'high' ? '#f97316' : '#eab308' }}>
                         {insightsData.urgency}
                       </div>
@@ -2759,7 +2759,7 @@ export default function Home() {
 
                     <div style={{ borderTop: `1px solid ${darkMode ? '#374151' : '#e5e7eb'}`, paddingTop: '16px' }}>
                       <div style={{ fontSize: '12px', fontWeight: '600', color: '#999', marginBottom: '8px', textTransform: 'uppercase' }}>
-                        Recommended Actions
+                        Actions Recommandées
                       </div>
                       <div style={{ display: 'flex', flexDirection: 'column', gap: '6px' }}>
                         {insightsData.recommendations.map((rec, i) => (
@@ -2794,7 +2794,7 @@ export default function Home() {
                           transition: 'all 0.2s'
                         }}
                       >
-                        📥 Export Report
+                        📥 Exporter le Rapport
                       </RippleButton>
                       <RippleButton
                         onClick={() => setShowInsightsCard(false)}
@@ -2811,7 +2811,7 @@ export default function Home() {
                           transition: 'all 0.2s'
                         }}
                       >
-                        📌 Dismiss
+                        📌 Fermer
                       </RippleButton>
                     </div>
                   </div>
