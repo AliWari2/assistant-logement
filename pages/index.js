@@ -71,12 +71,77 @@ const DEMO_CONVERSATIONS = [
 ];
 
 const TEMPLATES = [
-  { icon: '💧', label: 'Plomberie', text: 'J\'ai un problème de plomberie' },
-  { icon: '🌡️', label: 'Chauffage', text: 'Mon chauffage ne marche pas' },
-  { icon: '⚡', label: 'Électricité', text: 'J\'ai un problème électrique' },
-  { icon: '🪟', label: 'Isolation', text: 'Problème d\'isolation thermique' },
-  { icon: '🔊', label: 'Bruit', text: 'Problème de bruit/acoustique' },
-  { icon: '🏠', label: 'Généraliste', text: 'Problème général de logement' }
+  // PLOMBERIE
+  { 
+    icon: '💧', 
+    label: 'Fuite d\'eau', 
+    text: 'Fuite d\'eau qui goutte sous l\'évier de la cuisine depuis ce matin. Que faire?' 
+  },
+  { 
+    icon: '💧', 
+    label: 'Eau chaude', 
+    text: 'Eau chaude qui n\'arrive plus à la salle de bain, mais c\'est chaud ailleurs' 
+  },
+  
+  // CHAUFFAGE
+  { 
+    icon: '🌡️', 
+    label: 'Radiateur froid', 
+    text: 'Mon radiateur de chambre est complètement froid, les autres chauffent' 
+  },
+  { 
+    icon: '🌡️', 
+    label: 'Chauffage faible', 
+    text: 'Le chauffage monte pas en température malgré le thermostat au maximum' 
+  },
+  
+  // ÉLECTRICITÉ
+  { 
+    icon: '⚡', 
+    label: 'Prise cassée', 
+    text: 'Prise du salon qui ne donne plus de courant, les autres marchent' 
+  },
+  { 
+    icon: '⚡', 
+    label: 'Disjoncteur', 
+    text: 'Le disjoncteur saute régulièrement le soir, je dois le réenclencher' 
+  },
+  
+  // ISOLATION
+  { 
+    icon: '🪟', 
+    label: 'Courants d\'air', 
+    text: 'Courants d\'air autour de mes fenêtres en hiver. Comment tester et réparer?' 
+  },
+  { 
+    icon: '🪟', 
+    label: 'Condensation', 
+    text: 'Condensation constante sur les fenêtres quand il fait froid dehors' 
+  },
+  
+  // BRUIT
+  { 
+    icon: '🔊', 
+    label: 'Bruit voisins', 
+    text: 'Bruit des voisins du dessus surtout la nuit. C\'est supportable?' 
+  },
+  { 
+    icon: '🔊', 
+    label: 'Isolation phonique', 
+    text: 'Écho en cuisine et salon, les pièces sonnent creux. Normal?' 
+  },
+  
+  // GÉNÉRALISTE
+  { 
+    icon: '🏠', 
+    label: 'Inspection', 
+    text: 'Quels défauts majeures dois-je vérifier avant d\'acheter cet appart?' 
+  },
+  { 
+    icon: '🏠', 
+    label: 'Maintenance', 
+    text: 'Que dois-je vérifier régulièrement pour bien entretenir mon logement?' 
+  },
 ];
 
 const TAGS = [
