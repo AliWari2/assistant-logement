@@ -2140,7 +2140,25 @@ export default function Home() {
       <style jsx global>{`
         * { margin: 0; padding: 0; box-sizing: border-box; }
         body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif; background: ${bgGradient}; min-height: 100vh; padding: clamp(12px, 3vw, 20px); }
-        .wrapper { max-width: 1400px; margin: 0 auto; display: grid; grid-template-columns: 220px 1fr; gap: clamp(12px, 3vw, 20px); height: 92vh; }
+        .wrapper { 
+          display: grid; 
+          grid-template-columns: 1fr; 
+          gap: 0; 
+          height: 100vh; 
+          width: 100%;
+          padding: 0;
+          margin: 0;
+        }
+        @media (min-width: 1025px) {
+          .wrapper { 
+            max-width: 1400px; 
+            margin: 0 auto; 
+            grid-template-columns: clamp(200px, 20vw, 280px) 1fr; 
+            gap: clamp(12px, 2vw, 20px); 
+            height: 92vh; 
+            padding: clamp(8px, 2vw, 16px);
+          }
+        }
         .sidebar { background: ${containerBg}; border-radius: 20px; box-shadow: 0 25px 80px rgba(0,0,0,0.35); display: flex; flex-direction: column; overflow: hidden; }
         .sidebar-header { background: ${bgGradient}; color: white; padding: clamp(16px, 3vw, 20px); text-align: center; }
         .sidebar-header h2 { font-size: clamp(14px, 2.5vw, 16px); font-weight: 600; margin-bottom: 12px; }
@@ -2165,7 +2183,21 @@ export default function Home() {
         .conv-tag-badge { display: inline-block; padding: 2px 8px; border-radius: 10px; font-size: 10px; font-weight: 700; margin-right: 6px; }
         .fav-btn { background: none; border: none; cursor: pointer; font-size: 16px; padding: 4px; transition: all 0.2s; }
         .fav-btn:hover { transform: scale(1.2); }
-        .container { background: ${containerBg}; border-radius: 20px; box-shadow: 0 25px 80px rgba(0,0,0,0.35); display: flex; flex-direction: column; overflow: hidden; }
+        .container { 
+          background: ${containerBg}; 
+          display: flex; 
+          flex-direction: column; 
+          overflow: hidden;
+          border-radius: 0;
+          box-shadow: none;
+          height: 100%;
+        }
+        @media (min-width: 1025px) {
+          .container { 
+            border-radius: 20px; 
+            box-shadow: 0 25px 80px rgba(0,0,0,0.35);
+          }
+        }
         .header { background: ${bgGradient}; color: white; padding: clamp(18px, 3.5vw, 28px); display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 12px; }
         .header-content { flex: 1; }
         .header h1 { font-size: clamp(20px, 4.5vw, 32px); margin-bottom: 8px; font-weight: 600; }
@@ -2180,7 +2212,7 @@ export default function Home() {
         .templates-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(100px, 1fr)); gap: 8px; padding: 12px; }
         .template-btn { padding: 12px 8px; background: ${secondaryBg}; color: #2a5298; border: 1px solid ${borderColor}; border-radius: 8px; cursor: pointer; font-size: clamp(11px, 2vw, 12px); transition: all 0.2s; position: relative; overflow: hidden; }
         .template-btn:hover { background: ${darkMode ? '#475569' : '#e8f0ff'}; }
-        .messages-container { flex: 1; overflow-y: auto; padding: clamp(16px, 3vw, 32px); display: flex; flex-direction: column; gap: 18px; background: ${darkMode ? '#0f172a' : 'linear-gradient(to bottom, #fafbfc 0%, #ffffff 100%)'}; }
+        .messages-container { flex: 1; overflow-y: auto; padding: clamp(12px, 2.5vw, 24px); display: flex; flex-direction: column; gap: clamp(12px, 2vw, 16px); background: ${darkMode ? '#0f172a' : 'linear-gradient(to bottom, #fafbfc 0%, #ffffff 100%)'}; }
         .message { display: flex; gap: 10px; animation: slideIn 0.3s ease-out; }
         @keyframes slideIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
         .message.user { justify-content: flex-end; }
@@ -2189,7 +2221,7 @@ export default function Home() {
         .msg-avatar { width: 40px; height: 40px; border-radius: 8px; display: flex; align-items: center; justify-content: center; font-size: 20px; font-weight: 700; background: linear-gradient(135deg, #1e3c72 0%, #2a5298 100%); color: white; }
         .message.user .msg-avatar { background: linear-gradient(135deg, #3b82f6 0%, #1e40af 100%); }
         .message.assistant .msg-avatar { background: linear-gradient(135deg, #10b981 0%, #059669 100%); }
-        .msg-content { max-width: 90%; padding: 18px 22px; border-radius: 14px; line-height: 1.75; font-size: clamp(13px, 2.2vw, 15px); word-break: break-word; box-shadow: 0 2px 8px rgba(0,0,0,0.08); }
+        .msg-content { max-width: 85%; padding: clamp(12px, 2vw, 18px) clamp(14px, 3vw, 22px); border-radius: 14px; line-height: 1.6; font-size: clamp(13px, 2.2vw, 15px); word-break: break-word; box-shadow: 0 2px 8px rgba(0,0,0,0.08); }
         @media (min-width: 768px) { .msg-content { max-width: 75%; } }
         .message.assistant .msg-content { background: ${secondaryBg}; color: ${textColor}; border-left: 3px solid #2a5298; white-space: pre-wrap; }
         .message.user .msg-content { background: linear-gradient(135deg, #1e3c72 0%, #2a5298 100%); color: white; white-space: pre-wrap; }
@@ -2208,13 +2240,100 @@ export default function Home() {
         .suggestions { display: flex; gap: 8px; flex-wrap: wrap; margin-top: 8px; }
         .suggestion-btn { padding: 6px 12px; background: ${secondaryBg}; color: #2a5298; border: 1px solid ${borderColor}; border-radius: 6px; cursor: pointer; font-size: clamp(11px, 2vw, 12px); transition: all 0.2s; white-space: nowrap; position: relative; overflow: hidden; }
         .suggestion-btn:hover { background: ${darkMode ? '#475569' : '#e8f0ff'}; transform: translateY(-2px); }
-        .input-section { padding: clamp(16px, 2.5vw, 24px) clamp(16px, 3vw, 32px); border-top: 1px solid ${borderColor}; background: ${containerBg}; display: flex; gap: 12px; flex-direction: column; }
-        .input-section input { flex: 1; padding: 14px 18px; border: 1.5px solid ${borderColor}; border-radius: 10px; background: ${containerBg}; color: ${textColor}; font-size: clamp(13px, 2.2vw, 15px); min-height: 48px; }
+        .input-section { 
+          padding: clamp(10px, 2.5vw, 20px) clamp(10px, 2.5vw, 24px); 
+          border-top: 1px solid ${borderColor}; 
+          background: ${containerBg}; 
+          display: flex; 
+          gap: clamp(6px, 1.5vw, 12px); 
+          flex-direction: row;
+          flex-wrap: nowrap;
+          align-items: flex-end;
+          flex-shrink: 0;
+          width: 100%;
+          box-sizing: border-box;
+        }
+        @media (max-width: 480px) {
+          .input-section { 
+            padding: clamp(8px, 2vw, 12px) clamp(8px, 2vw, 16px);
+            gap: clamp(4px, 1vw, 8px);
+          }
+        }
+        .input-section input { 
+          flex: 1; 
+          min-width: clamp(100px, 40vw, 300px);
+          padding: clamp(8px, 1.5vw, 12px) clamp(10px, 2vw, 16px); 
+          border: 1.5px solid ${borderColor}; 
+          border-radius: 8px; 
+          background: ${containerBg}; 
+          color: ${textColor}; 
+          font-size: clamp(12px, 2.5vw, 15px); 
+          min-height: 40px;
+          box-sizing: border-box;
+        }
+        @media (max-width: 480px) {
+          .input-section input { 
+            padding: clamp(6px, 1.5vw, 8px) clamp(8px, 1.5vw, 12px);
+            min-height: 38px;
+            font-size: clamp(12px, 3vw, 14px);
+          }
+        }
         .input-section input:focus { outline: none; border-color: #2a5298; box-shadow: 0 0 0 4px rgba(42,82,152,0.12); }
-        .send-btn { padding: 14px 32px; background: ${bgGradient}; color: white; border: none; border-radius: 10px; cursor: pointer; font-weight: 600; font-size: clamp(13px, 2.2vw, 15px); box-shadow: 0 4px 12px rgba(42,82,152,0.25); transition: all 0.3s; position: relative; overflow: hidden; min-height: 48px; }
+        .send-btn { 
+          padding: clamp(8px, 1.5vw, 12px) clamp(12px, 2vw, 24px); 
+          background: ${bgGradient}; 
+          color: white; 
+          border: none; 
+          border-radius: 8px; 
+          cursor: pointer; 
+          font-weight: 600; 
+          font-size: clamp(11px, 2vw, 14px); 
+          box-shadow: 0 4px 12px rgba(42,82,152,0.25); 
+          transition: all 0.3s; 
+          position: relative; 
+          overflow: hidden; 
+          min-height: 40px;
+          flex-shrink: 0;
+          white-space: nowrap;
+        }
+        @media (max-width: 480px) {
+          .send-btn { 
+            padding: clamp(6px, 1.5vw, 10px) clamp(10px, 2vw, 16px);
+            min-height: 38px;
+            font-size: clamp(10px, 2vw, 12px);
+          }
+        }
         .send-btn:hover:not(:disabled) { transform: translateY(-2px); box-shadow: 0 6px 16px rgba(42,82,152,0.35); }
         .send-btn:disabled { opacity: 0.65; }
-        .voice-btn { padding: 12px 16px; background: ${isListening ? 'linear-gradient(135deg, #ef4444 0%, #dc2626 100%)' : bgGradient}; color: white; border: none; border-radius: 10px; cursor: pointer; font-weight: 600; font-size: 16px; box-shadow: 0 4px 12px rgba(42,82,152,0.25); transition: all 0.3s; animation: ${isListening ? 'voicePulse 1s infinite' : 'none'}; position: relative; overflow: hidden; }
+        .voice-btn { 
+          padding: clamp(8px, 1.5vw, 12px) clamp(10px, 2vw, 14px); 
+          background: ${isListening ? 'linear-gradient(135deg, #ef4444 0%, #dc2626 100%)' : bgGradient}; 
+          color: white; 
+          border: none; 
+          border-radius: 8px; 
+          cursor: pointer; 
+          font-weight: 600; 
+          font-size: clamp(16px, 3vw, 18px); 
+          box-shadow: 0 4px 12px rgba(42,82,152,0.25); 
+          transition: all 0.3s; 
+          animation: ${isListening ? 'voicePulse 1s infinite' : 'none'}; 
+          position: relative; 
+          overflow: hidden; 
+          min-height: 40px;
+          min-width: 40px;
+          flex-shrink: 0;
+          display: flex;
+          align-items: center;
+          justify-content: center;
+        }
+        @media (max-width: 480px) {
+          .voice-btn { 
+            padding: clamp(6px, 1.5vw, 10px);
+            min-height: 38px;
+            min-width: 38px;
+            font-size: clamp(14px, 2.5vw, 16px);
+          }
+        }
         @keyframes voicePulse { 0%, 100% { transform: scale(1); } 50% { transform: scale(1.05); } }
         .voice-btn:hover { transform: ${isListening ? 'scale(1.05)' : 'translateY(-2px)'}; }
         .voice-interim { font-size: 12px; color: #2a5298; font-style: italic; margin-top: 4px; min-height: 16px; }
@@ -2244,28 +2363,92 @@ export default function Home() {
         ::-webkit-scrollbar-thumb { background: ${darkMode ? '#64748b' : '#888'}; border-radius: 3px; }
         ::-webkit-scrollbar-thumb:hover { background: ${darkMode ? '#94a3b8' : '#555'}; }
         @media (max-width: 768px) { 
-          .wrapper { grid-template-columns: 1fr; height: auto; min-height: 100vh; } 
-          .sidebar { display: none; }
-          .container { border-radius: 0; }
-          .header { padding: clamp(16px, 4vw, 20px); border-radius: 0; }
-          .header h1 { font-size: clamp(18px, 5vw, 24px); }
-          .header p { font-size: clamp(12px, 2.5vw, 14px); }
-          .messages-container { padding: clamp(16px, 2vw, 20px); gap: 16px; }
-          .msg-content { max-width: 85% !important; padding: 14px 18px; font-size: 14px; }
+          .wrapper { 
+            grid-template-columns: 1fr; 
+            height: 100vh; 
+            gap: 0;
+            padding: 0;
+          }
+          .sidebar { display: none !important; }
+          .container { 
+            border-radius: 0; 
+            box-shadow: none;
+            padding: 0;
+          }
+          .header { 
+            padding: clamp(12px, 3vw, 18px) clamp(12px, 3vw, 20px); 
+            border-radius: 0;
+            flex-shrink: 0;
+          }
+          .header h1 { font-size: clamp(18px, 4vw, 24px); }
+          .header p { font-size: clamp(11px, 2.5vw, 13px); }
+          .messages-container { 
+            padding: clamp(10px, 2vw, 14px) clamp(10px, 2vw, 16px); 
+            gap: clamp(8px, 1.5vw, 12px);
+            flex: 1;
+          }
+          .message { display: flex; gap: 6px; }
+          .msg-content { 
+            max-width: 90% !important; 
+            padding: clamp(8px, 2vw, 12px) clamp(12px, 2vw, 14px); 
+            font-size: clamp(12px, 2.5vw, 13px); 
+            line-height: 1.5;
+            border-radius: 10px;
+          }
+          .msg-avatar { width: 28px; height: 28px; font-size: 14px; min-width: 28px; }
           .message.user { margin-left: auto; }
-          .msg-avatar { width: 36px; height: 36px; font-size: 18px; }
-          .toolbar { padding: clamp(12px, 2vw, 16px); gap: 8px; justify-content: flex-start; overflow-x: auto; }
-          .toolbar-btn { font-size: 12px; padding: 8px 12px; flex-shrink: 0; min-height: 40px; }
-          .input-section { padding: clamp(14px, 2vw, 18px); gap: 10px; }
-          .input-section input { padding: 12px 14px; font-size: 14px; min-height: 44px; }
-          .send-btn { padding: 12px 20px; font-size: 14px; min-height: 44px; flex-shrink: 0; }
-          .voice-btn { padding: 12px 16px; font-size: 18px; min-height: 48px; touch-action: manipulation; -webkit-user-select: none; user-select: none; }
-          .voice-btn:active { transform: scale(0.95); transition: transform 0.15s ease-out; }
-          .templates-grid { grid-template-columns: repeat(2, 1fr); gap: 6px; padding: 8px; }
-          .template-btn { padding: 10px 6px; font-size: 11px; }
-          .conv-item { font-size: 12px; padding: 10px; }
-          .stat-number { font-size: 16px; }
-          .stat-label { font-size: 10px; }
+          .toolbar { 
+            padding: clamp(6px, 1.5vw, 10px) clamp(10px, 2vw, 14px); 
+            gap: 4px; 
+            justify-content: flex-start; 
+            overflow-x: auto;
+            flex-shrink: 0;
+          }
+          .toolbar-btn { font-size: 10px; padding: 4px 8px; flex-shrink: 0; min-height: 36px; }
+          .input-section { 
+            padding: clamp(8px, 1.5vw, 12px) clamp(10px, 1.5vw, 14px); 
+            gap: clamp(4px, 1vw, 8px); 
+            flex-wrap: nowrap;
+            flex-shrink: 0;
+          }
+          .input-section input { 
+            padding: clamp(6px, 1.5vw, 10px) clamp(10px, 1.5vw, 14px); 
+            font-size: clamp(12px, 2.5vw, 13px); 
+            min-height: 38px;
+            border-radius: 6px;
+          }
+          .send-btn { 
+            padding: clamp(6px, 1.5vw, 10px) clamp(10px, 1.5vw, 16px); 
+            font-size: clamp(10px, 2vw, 12px); 
+            min-height: 38px;
+            border-radius: 6px;
+          }
+          .voice-btn { 
+            padding: clamp(6px, 1.5vw, 10px);
+            font-size: 16px; 
+            min-height: 38px;
+            min-width: 38px;
+            border-radius: 6px;
+          }
+          .templates-grid { grid-template-columns: repeat(2, 1fr); gap: 3px; padding: 4px; }
+          .template-btn { padding: 6px 3px; font-size: 9px; }
+          .conv-item { font-size: 10px; padding: 6px; }
+          .stat-number { font-size: 13px; }
+          .stat-label { font-size: 8px; }
+        }
+        @media (max-width: 380px) {
+          .header h1 { font-size: clamp(16px, 4vw, 20px); }
+          .messages-container { padding: clamp(6px, 1.5vw, 10px) clamp(8px, 1.5vw, 12px); }
+          .msg-content { 
+            max-width: 95% !important; 
+            padding: clamp(6px, 1.5vw, 10px) clamp(10px, 1.5vw, 12px);
+            font-size: clamp(11px, 2.5vw, 12px);
+          }
+          .input-section { padding: clamp(6px, 1vw, 8px) clamp(8px, 1.5vw, 10px); gap: clamp(2px, 0.5vw, 4px); }
+          .input-section input { min-width: clamp(80px, 30vw, 150px); font-size: clamp(11px, 2.5vw, 12px); }
+          .send-btn { font-size: clamp(9px, 1.5vw, 10px); padding: clamp(4px, 1vw, 6px) clamp(8px, 1.5vw, 10px); }
+          .voice-btn { font-size: clamp(12px, 2vw, 14px); }
+          .toolbar-btn { font-size: 8px; padding: 2px 4px; min-height: 32px; }
         }
         @keyframes fadeInUp {
           from {
