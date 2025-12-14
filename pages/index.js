@@ -1102,6 +1102,7 @@ export default function Home() {
       setIsDemoMode(true);
       setCurrentConvId(DEMO_CONVERSATIONS[0].id);
       setMessages(DEMO_CONVERSATIONS[0].messages);
+      setAuthPage(false);  // ← FERME LE MODAL ET AFFICHE L'APP!
       setDemoLoading(false);
       setToast('✅ Démo chargée! Explore les conversations.');
       setTimeout(() => setToast(null), 3000);
