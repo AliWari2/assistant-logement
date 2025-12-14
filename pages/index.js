@@ -901,6 +901,7 @@ export default function Home() {
   const [reactions, setReactions] = useState({});
   const [isListening, setIsListening] = useState(false);
   const [voiceInterimText, setVoiceInterimText] = useState('');
+  const [voiceAvailable, setVoiceAvailable] = useState(false);
   const [selectedTag, setSelectedTag] = useState(null);
   const [showTagPicker, setShowTagPicker] = useState(null);
   const [regeneratingIndex, setRegeneratingIndex] = useState(null);
@@ -1007,28 +1008,130 @@ export default function Home() {
   const fileInputRef = useRef(null);
 
   useEffect(() => {
-    if (typeof window !== 'undefined') {
-      const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
-      if (SpeechRecognition) {
-        recognitionRef.current = new SpeechRecognition();
-        recognitionRef.current.continuous = false;
-        recognitionRef.current.interimResults = true;
-        recognitionRef.current.lang = 'fr-FR';
-        recognitionRef.current.onstart = () => { setIsListening(true); setVoiceInterimText(''); };
-        recognitionRef.current.onresult = (event) => {
-          let interim = '';
-          let finalText = '';
-          for (let i = event.resultIndex; i < event.results.length; i++) {
-            const transcript = event.results[i][0].transcript;
-            if (event.results[i].isFinal) finalText += transcript + ' ';
-            else interim += transcript;
-          }
-          if (finalText) { setInput(prev => prev + finalText); setVoiceInterimText(''); }
-          else setVoiceInterimText(interim);
-        };
-        recognitionRef.current.onerror = () => { setIsListening(false); };
-        recognitionRef.current.onend = () => { setIsListening(false); setVoiceInterimText(''); };
+    if (typeof window === 'undefined') return;
+
+    try {
+      // Détection du dispositif/navigateur
+      const userAgent = navigator.userAgent.toLowerCase();
+      const isIOS = /iPad|iPhone|iPod/.test(navigator.userAgent);
+      const isAndroid = /android/.test(userAgent);
+      const isChrome = /chrome/.test(userAgent) && !/edge|edg/.test(userAgent);
+      const isSafari = /safari/.test(userAgent) && !/chrome|chromium|crios/.test(userAgent);
+      const isEdge = /edge|edg/.test(userAgent);
+      
+      // Essayer d'accéder à l'API
+      const SpeechRecognitionAPI = window.SpeechRecognition || window.webkitSpeechRecognition;
+      
+      if (!SpeechRecognitionAPI) {
+        console.warn('❌ SpeechRecognition API non disponible dans ce navigateur');
+        setVoiceAvailable(false);
+        return;
       }
+
+      // Essayer de créer une instance
+      const recognition = new SpeechRecognitionAPI();
+      
+      // Configuration
+      recognition.continuous = false;
+      recognition.interimResults = true;
+      recognition.lang = 'fr-FR';
+      
+      // Configuration spécifique par plateforme
+      if (isIOS && isSafari) {
+        // iOS Safari: plus stricte sur les permissions
+        recognition.lang = 'fr-FR';
+      } else if (isAndroid) {
+        // Android Chrome: configuration standard
+        recognition.lang = 'fr-FR';
+      }
+
+      // Handlers
+      recognition.onstart = () => {
+        setIsListening(true);
+        setVoiceInterimText('');
+        const message = isIOS 
+          ? '🎤 Microphone activé (iOS) - Parlez en français'
+          : isAndroid
+            ? '🎤 Microphone activé (Android) - Parlez en français'
+            : '🎤 Micro activé - Parlez maintenant...';
+        setToast(message);
+        setTimeout(() => setToast(null), 1500);
+      };
+
+      recognition.onresult = (event) => {
+        let interim = '';
+        let finalText = '';
+        
+        for (let i = event.resultIndex; i < event.results.length; i++) {
+          const transcript = event.results[i][0].transcript.trim();
+          
+          if (event.results[i].isFinal) {
+            if (transcript) finalText += transcript + ' ';
+          } else {
+            interim += transcript;
+          }
+        }
+        
+        if (finalText) {
+          setInput(prev => prev + finalText);
+          setVoiceInterimText('');
+        } else if (interim) {
+          setVoiceInterimText(interim);
+        }
+      };
+
+      recognition.onerror = (event) => {
+        setIsListening(false);
+        let errorMsg = '❌ Erreur micro';
+        
+        switch(event.error) {
+          case 'network':
+            errorMsg = '⚠️ Erreur réseau - vérifiez votre connexion Internet';
+            break;
+          case 'audio':
+            errorMsg = '🔇 Problème micro:\n• Vérifiez que le micro n\'est pas muet\n• Testez le micro ailleurs';
+            break;
+          case 'not-allowed':
+            if (isIOS) {
+              errorMsg = '🔒 Permissions refusées (iOS):\n1. Paramètres → Confidentialité\n2. Microphone → Activer Safari';
+            } else if (isAndroid) {
+              errorMsg = '🔒 Permissions refusées (Android):\n1. Paramètres → Applications\n2. Permissions → Microphone → Activer';
+            } else {
+              errorMsg = '🔒 Permissions refusées:\nAutorisez le micro dans les paramètres';
+            }
+            break;
+          case 'no-speech':
+            errorMsg = '🔇 Aucun son détecté:\n• Parlez plus fort\n• Rapprochez-vous du micro\n• Réessayez';
+            break;
+          case 'service-not-allowed':
+            errorMsg = '⚠️ Service désactivé - Réessayez dans quelques secondes';
+            break;
+          default:
+            errorMsg = `❌ Erreur: ${event.error}`;
+        }
+        
+        setToast(errorMsg);
+        setTimeout(() => setToast(null), 4000);
+      };
+
+      recognition.onend = () => {
+        setIsListening(false);
+        setVoiceInterimText('');
+      };
+
+      // Stocker la référence + infos plateforme
+      recognitionRef.current = recognition;
+      recognitionRef.current.isIOS = isIOS;
+      recognitionRef.current.isAndroid = isAndroid;
+      
+      setVoiceAvailable(true);
+      console.log(`✅ Reconnaissance vocale disponible (${isIOS ? 'iOS' : isAndroid ? 'Android' : 'Desktop'})`);
+
+    } catch (error) {
+      console.error('❌ Erreur initialisation reconnaissance vocale:', error);
+      setVoiceAvailable(false);
+      setToast('❌ Reconnaissance vocale non disponible');
+      setTimeout(() => setToast(null), 2000);
     }
   }, []);
 
@@ -1707,13 +1810,40 @@ export default function Home() {
   };
 
   const toggleVoiceRecognition = () => {
-    if (!recognitionRef.current) {
-      setToast('Reconnaissance vocale non disponible');
+    try {
+      // Vérifier si disponible
+      if (!voiceAvailable || !recognitionRef.current) {
+        const navName = /Firefox/.test(navigator.userAgent) ? 'Firefox' : 'ce navigateur';
+        setToast(`🔇 Reconnaissance vocale non disponible dans ${navName}\n💡 Essayez: Chrome, Edge, Safari`);
+        setTimeout(() => setToast(null), 3000);
+        return;
+      }
+
+      // Toggle start/stop
+      if (isListening) {
+        recognitionRef.current.stop();
+        setIsListening(false);
+      } else {
+        try {
+          // Réinitialiser avant de commencer
+          recognitionRef.current.abort();
+          recognitionRef.current.start();
+        } catch (error) {
+          console.log('Erreur lors du démarrage:', error);
+          // Essayer à nouveau
+          try {
+            recognitionRef.current.start();
+          } catch (e) {
+            setToast('❌ Impossible de démarrer le micro - vérifiez les permissions');
+            setTimeout(() => setToast(null), 2000);
+          }
+        }
+      }
+    } catch (error) {
+      console.error('Erreur avec la reconnaissance vocale:', error);
+      setToast('❌ Erreur micro: vérifiez les permissions');
       setTimeout(() => setToast(null), 2000);
-      return;
     }
-    if (isListening) recognitionRef.current.stop();
-    else recognitionRef.current.start();
   };
 
   const parseMarkdown = (text) => {
@@ -2129,7 +2259,8 @@ export default function Home() {
           .input-section { padding: clamp(14px, 2vw, 18px); gap: 10px; }
           .input-section input { padding: 12px 14px; font-size: 14px; min-height: 44px; }
           .send-btn { padding: 12px 20px; font-size: 14px; min-height: 44px; flex-shrink: 0; }
-          .voice-btn { padding: 12px 14px; font-size: 14px; min-height: 44px; }
+          .voice-btn { padding: 12px 16px; font-size: 18px; min-height: 48px; touch-action: manipulation; -webkit-user-select: none; user-select: none; }
+          .voice-btn:active { transform: scale(0.95); transition: transform 0.15s ease-out; }
           .templates-grid { grid-template-columns: repeat(2, 1fr); gap: 6px; padding: 8px; }
           .template-btn { padding: 10px 6px; font-size: 11px; }
           .conv-item { font-size: 12px; padding: 10px; }
@@ -2544,7 +2675,21 @@ export default function Home() {
 
           <div className="input-section">
             <div style={{ display: 'flex', gap: '8px', flexWrap: 'wrap' }}>
-              <RippleButton className="voice-btn" onClick={toggleVoiceRecognition} title={isListening ? 'Arrêter l\'écoute' : 'Parler'}>{isListening ? '🔴' : '🎤'}</RippleButton>
+              <RippleButton 
+                className="voice-btn" 
+                onClick={toggleVoiceRecognition} 
+                title={
+                  isListening 
+                    ? '🔴 Écoute en cours - Cliquer pour arrêter' 
+                    : voiceAvailable 
+                      ? '🎤 Parler en français - Cliquer pour activer le micro' 
+                      : '🔇 Micro non disponible - Essayez Chrome, Edge ou Safari'
+                }
+                disabled={!voiceAvailable && !isListening}
+                style={{ opacity: !voiceAvailable && !isListening ? 0.5 : 1 }}
+              >
+                {isListening ? '🔴' : '🎤'}
+              </RippleButton>
               <div style={{ flex: 1, minWidth: '200px' }}>
                 <div style={{ display: 'flex', gap: '8px', marginBottom: uploadPreview ? '8px' : '0', flexWrap: 'wrap' }}>
                   <input 
