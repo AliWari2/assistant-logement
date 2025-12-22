@@ -13,7 +13,7 @@
 
 ## 🚀 Démo Live
 
-**https://assistant-immobilier.vercel.app**
+**https://assistant-logement.vercel.app/**
 
 ⚡ *Testé en production - Accès instant sans inscription*
 
